@@ -14,9 +14,4 @@ public abstract class DomainEventEntityBase
     {
         DomainEvents.Clear();
     }
-
-    public void ClearDomainEvents(Predicate<IDomainEvent> predicate)
-    {
-        DomainEvents.RemoveAll(predicate);
-    }
 }

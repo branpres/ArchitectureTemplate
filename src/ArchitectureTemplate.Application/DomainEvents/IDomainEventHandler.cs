@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.DomainEvents;
+﻿namespace ArchitectureTemplate.Application.DomainEvents;
 
 public interface IDomainEventHandler<T> where T : IDomainEvent
 {

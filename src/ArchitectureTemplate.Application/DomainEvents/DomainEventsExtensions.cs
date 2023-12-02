@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.DomainEvents;
+﻿namespace ArchitectureTemplate.Application.DomainEvents;
 
 public static class DomainEventsExtensions
 {
