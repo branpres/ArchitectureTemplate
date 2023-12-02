@@ -7,7 +7,7 @@ public class CreateEndpoint : IEndpoint
         builder.MapPost("/project", CreateProject)
         .WithOpenApi(x => new(x)
         {
-            OperationId = "Create Project",
+            OperationId = "CreateProject",
             Description = "Creates a new project. Assigns first project user. Notifies new project user. Creates initial project scope package. Creates project BOM."
         })
         .Produces(StatusCodes.Status200OK)
