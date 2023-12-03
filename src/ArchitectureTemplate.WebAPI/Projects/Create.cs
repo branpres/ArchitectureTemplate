@@ -21,7 +21,9 @@ public class CreateEndpoint : IEndpoint
         [FromServices] IRequestHandler<CreateProjectRequest, CreateProjectResponse> handler,
         CancellationToken cancellationToken)
     {
-        var response = await handler.Handle(request, cancellationToken);
-        return Results.Created("", response);
+        var result = await handler.Handle(request, cancellationToken);
+        return result.Match(
+            response => Results.Created("", response),
+            exception => Results.BadRequest());
     }
 }

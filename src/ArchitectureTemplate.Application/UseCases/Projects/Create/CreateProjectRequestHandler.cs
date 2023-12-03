@@ -2,8 +2,10 @@
 
 public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
 {
-    public Task<CreateProjectResponse> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+    Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new CreateProjectResponse(Guid.NewGuid(), request.CompanyId, request.ProjectName, request.ProjectIdentifier));
+        var response = new CreateProjectResponse(Guid.NewGuid(), request.CompanyId, request.ProjectName, request.ProjectIdentifier);
+        var result = new Result<CreateProjectResponse?>(response);
+        return Task.FromResult(result);
     }
 }

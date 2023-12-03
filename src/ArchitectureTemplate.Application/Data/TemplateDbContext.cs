@@ -1,7 +1,4 @@
-﻿using ArchitectureTemplate.Domain.DomainEvents;
-using ArchitectureTemplate.Domain.Interfaces;
-
-namespace ArchitectureTemplate.Application.Data;
+﻿namespace ArchitectureTemplate.Application.Data;
 
 public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher domainEventDispatcher) : DbContext(options)
 {
@@ -36,14 +33,14 @@ public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher 
             }
         }
 
-        await _domainEventDispatcher.DispatchDomainEvents(GetRegisteredDomainEvents(this));
+        await _domainEventDispatcher.DispatchDomainEvents(GetEntitiesWithDomainEvents(this));
 
         var result = await base.SaveChangesAsync(cancellationToken);
 
         return result;
     }
 
-    private static List<DomainEventEntityBase> GetRegisteredDomainEvents(DbContext dbContext)
+    private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(DbContext dbContext)
     {
         return dbContext.ChangeTracker.Entries<DomainEventEntityBase>()
             .Where(x => x.Entity.DomainEvents.Count != 0)
