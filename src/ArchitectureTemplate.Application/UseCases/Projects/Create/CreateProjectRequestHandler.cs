@@ -1,4 +1,6 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.Projects.Create;
+﻿
+
+namespace ArchitectureTemplate.Application.UseCases.Projects.Create;
 
 public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
 {

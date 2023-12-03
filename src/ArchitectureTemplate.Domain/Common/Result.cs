@@ -1,9 +1,9 @@
-﻿namespace ArchitectureTemplate.Application.UseCases;
+﻿namespace ArchitectureTemplate.Domain.Common;
 
 public class Result<T>
 {
     private readonly T? _value;
-    private readonly Exception? _exception;
+    private readonly ResultException? _exception;
 
     public Result(T value)
     {
@@ -12,7 +12,7 @@ public class Result<T>
         IsSuccess = true;
     }
 
-    public Result(Exception exception)
+    public Result(ResultException exception)
     {
         _value = default;
         _exception = exception;
@@ -22,6 +22,6 @@ public class Result<T>
 
     public bool IsError => !IsSuccess;
 
-    public TResult Match<TResult>(Func<T, TResult> success, Func<Exception, TResult> error)
+    public TResult Match<TResult>(Func<T, TResult> success, Func<ResultException, TResult> error)
         => IsSuccess ? success(_value!) : error(_exception!);
 } 

@@ -24,6 +24,9 @@ public class CreateEndpoint : IEndpoint
         var result = await handler.Handle(request, cancellationToken);
         return result.Match(
             response => Results.Created("", response),
-            exception => Results.BadRequest());
+            exception => Results.BadRequest(
+                exception.Errors != null
+                    ? new ValidationProblemDetails(exception.Errors)
+                    : new ValidationProblemDetails()));
     }
 }
