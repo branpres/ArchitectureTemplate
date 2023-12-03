@@ -1,19 +1,23 @@
-﻿using ArchitectureTemplate.Domain.DomainEvents;
-using ArchitectureTemplate.Domain.Interfaces;
+﻿namespace ArchitectureTemplate.Domain.Projects;
 
-namespace ArchitectureTemplate.Domain.Projects;
-
-public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
+public class ProjectUser: DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
-    public Guid ProjectUserId { get; set; }
+    private ProjectUser(Project project, Guid userId, bool isAdmin = false)
+    {
+        Project = project;
+        UserId = userId;
+        IsAdmin = isAdmin;
+    }
 
-    public Guid ProjectId { get; set; }
+    public Guid ProjectUserId { get; private set; }
 
-    public required Project Project { get; set; }
+    public Guid ProjectId { get; private set; }
 
-    public Guid UserId { get; set; }
+    public Project Project { get; private set; }
 
-    public bool IsAdmin { get; set; }
+    public Guid UserId { get; private set; }
+
+    public bool IsAdmin { get; private set; }
 
     public DateTime CreatedOn { get; set; }
 
@@ -28,4 +32,8 @@ public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadat
     public DateTime? DeletedOn { get; set; }
 
     public Guid? DeletedBy { get; set; }
+
+    public static ProjectUser CreateAdminUser(Project project, Guid userId) => new(project, userId, true);
+
+    public static ProjectUser CreateNonAdminUser(Project project, Guid userId) => new(project, userId);
 }

@@ -1,21 +1,19 @@
-﻿using ArchitectureTemplate.Domain.DomainEvents;
-using ArchitectureTemplate.Domain.Interfaces;
+﻿namespace ArchitectureTemplate.Domain.Projects;
 
-namespace ArchitectureTemplate.Domain.Projects;
-
-public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
+public class Project(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
+    : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
-    public Guid ProjectId { get; set; }
+    public Guid ProjectId { get; private set; }
 
-    public Guid CompanyId { get; set; }
+    public Guid CompanyId { get; private set; } = companyId;
 
-    public Guid? ProjectTypeId { get; set; }
+    public string ProjectName { get; private set; } = projectName;
 
-    public List<ProjectUser>? ProjectUsers { get; set; }
+    public Guid? ProjectTypeId { get; private set; } = projectTypeId;
 
-    public required string ProjectName { get; set; }
+    public string? ProjectIdentifier { get; private set; } = projectIdentifier;
 
-    public string? ProjectIdentifier { get; set; }
+    public List<ProjectUser>? ProjectUsers { get; private set; }
 
     public DateTime CreatedOn { get; set; }
 
@@ -30,4 +28,16 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public DateTime? DeletedOn { get; set; }
 
     public Guid? DeletedBy { get; set; }
+
+    public void AddProjectUser(Guid userId)
+    {
+        ProjectUsers ??= [];
+        ProjectUsers.Add(ProjectUser.CreateNonAdminUser(this, userId));
+    }
+
+    public void AddProjectAdminUser(Guid userId)
+    {
+        ProjectUsers ??= [];
+        ProjectUsers.Add(ProjectUser.CreateAdminUser(this, userId));
+    }
 }

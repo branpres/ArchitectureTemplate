@@ -33,6 +33,20 @@ public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher 
             }
         }
 
+        foreach (var entry in ChangeTracker.Entries<IDeleteMetadata>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Modified:
+                    if (entry.Entity.IsDeleted)
+                    {
+                        entry.Entity.DeletedBy = Guid.NewGuid(); // pretending we have a user
+                        entry.Entity.DeletedOn = DateTime.UtcNow;
+                    }
+                    break;
+            }
+        }
+
         await _domainEventDispatcher.DispatchDomainEvents(GetEntitiesWithDomainEvents(this));
 
         var result = await base.SaveChangesAsync(cancellationToken);

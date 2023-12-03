@@ -3,10 +3,6 @@
 public record CreateProjectRequest(
     Guid CompanyId,
     string ProjectName,
-    string ProjectIdentifier,
-    Guid RequestedBy,
-    Guid? ProjectImageId,
+    string? ProjectIdentifier,
     Guid? ProjectTypeId,
-    Guid? UserId,
-    string UserEmail,
-    bool? IsAdmin);
+    Guid? AdminUserId);
