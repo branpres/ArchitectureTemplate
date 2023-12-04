@@ -12,28 +12,53 @@ public class CreateProjectRequestHandler(
 
     async Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
+        var validationResult = await Validate(request, cancellationToken);
+        if (!validationResult.IsSuccess)
+        {
+            return validationResult.Result!;
+        }
+
+        var project = Create(request);
+
+        await _templateDbContext.Project.AddAsync(project, cancellationToken);
+        await _templateDbContext.SaveChangesAsync(cancellationToken);
+
+        var result = new Result<CreateProjectResponse?>(project.Map());
+        return result;
+    }
+
+    private async Task<(bool IsSuccess, Result<CreateProjectResponse?>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
+    {
         var validationResult = _validator.Validate(request);
         if (!validationResult.IsValid)
         {
-            return new Result<CreateProjectResponse?>(new ResultException(validationResult.Errors));
+            return (false, new Result<CreateProjectResponse?>(new ResultException(validationResult.Errors)));
         }
 
         var invalidCreateDataException = new ResultException();
-        if (await _templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName))
+
+        if (!await _templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName, cancellationToken))
         {
             invalidCreateDataException.AddError("ProjectName", "Project name already exists for this company.");
         }
-        if (request.ProjectIdentifier != null && !await _templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier))
+
+        if (request.ProjectIdentifier != null && !await _templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier, cancellationToken))
         {
             invalidCreateDataException.AddError("ProjectIdentifier", "Project identifier already exists for this company.");
         }
+
         if (invalidCreateDataException.Errors.Count > 0)
         {
-            return new Result<CreateProjectResponse?>(invalidCreateDataException);
-        }        
+            return (false, new Result<CreateProjectResponse?>(invalidCreateDataException));
+        }
 
+        return (true, null);
+    }
+
+    private Project Create(CreateProjectRequest request)
+    {
         var project = Project.Create(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
-        
+
         if (request.AdminUserId.HasValue)
         {
             project.AddProjectAdminUser(request.AdminUserId.Value);
@@ -44,10 +69,6 @@ public class CreateProjectRequestHandler(
             project.AddProjectUser(_currentUser.UserId);
         }
 
-        await _templateDbContext.Project.AddAsync(project, cancellationToken);
-        await _templateDbContext.SaveChangesAsync(cancellationToken);
-
-        var result = new Result<CreateProjectResponse?>(project.Map());
-        return result;
+        return project;
     }
 }

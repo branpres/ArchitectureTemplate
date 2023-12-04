@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.WebAPI.Projects;
+﻿namespace ArchitectureTemplate.WebAPI.Endpoints.Projects;
 
 public class CreateEndpoint : IEndpoint
 {

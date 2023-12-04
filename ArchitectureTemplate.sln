@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTemplate.WebAPI
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C5932ECF-77F4-4F86-8626-EA64ABA04D9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTemplate.Domain", "src\ArchitectureTemplate.Domain\ArchitectureTemplate.Domain.csproj", "{CBEE0A22-8B02-45F5-8CB9-1730173E04C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTemplate.Domain", "src\ArchitectureTemplate.Domain\ArchitectureTemplate.Domain.csproj", "{CBEE0A22-8B02-45F5-8CB9-1730173E04C4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A2F85174-E7A3-4976-9656-E81BFB517442}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTemplate.Application", "src\ArchitectureTemplate.Application\ArchitectureTemplate.Application.csproj", "{4DCE3F3D-8D3E-49CA-B06F-54774C14A866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTemplate.Application", "src\ArchitectureTemplate.Application\ArchitectureTemplate.Application.csproj", "{4DCE3F3D-8D3E-49CA-B06F-54774C14A866}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B837254D-56A9-4A1D-89B4-C834E0D77BE4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
