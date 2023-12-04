@@ -56,18 +56,10 @@ public class TemplateDbContext(
             }
         }
 
-        await _domainEventDispatcher.DispatchDomainEvents(GetEntitiesWithDomainEvents(this));
+        await _domainEventDispatcher.DispatchDomainEvents(this);
 
         var result = await base.SaveChangesAsync(cancellationToken);
 
         return result;
-    }
-
-    private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(DbContext dbContext)
-    {
-        return dbContext.ChangeTracker.Entries<DomainEventEntityBase>()
-            .Where(x => x.Entity.DomainEvents.Count != 0)
-            .Select(x => x.Entity)
-            .ToList();
     }
 }
