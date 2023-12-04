@@ -2,25 +2,36 @@
 
 public class ResultException : Exception
 {
-    public Dictionary<string, string[]> Errors { get; } = [];
+    private readonly Dictionary<string, List<string>> _errors = [];
+
+    public Dictionary<string, string[]> Errors => _errors.ToDictionary(x => x.Key, x => x.Value.ToArray());
 
     public ResultException(string propertyName, string errorMessage) : base()
     {
-        Errors.Add(propertyName, [errorMessage]);
+        _errors.Add(propertyName, [errorMessage]);
     }
 
-    public ResultException(Dictionary<string, string[]> errors) : base()
+    public ResultException(List<ValidationFailure> validationFailures) : base()
     {
-        Errors = errors;
+        foreach (var validationFailure in validationFailures)
+        {
+            if (!_errors.TryGetValue(validationFailure.PropertyName, out List<string>? errorMessages))
+            {
+                errorMessages = ([]);
+                _errors[validationFailure.PropertyName] = errorMessages;
+            }
+
+            errorMessages.Add(validationFailure.ErrorMessage);
+        }
     }
 
     public void AddError(string propertyName, string errorMessage)
     {
-        Errors.Add(propertyName, [errorMessage]);
+        _errors.Add(propertyName, [errorMessage]);
     }
 
-    public void AddError(string propertyName, string[] errorMessages)
+    public void AddError(string propertyName, List<string> errorMessages)
     {
-        Errors.Add(propertyName, errorMessages);
+        _errors.Add(propertyName, errorMessages);
     }
 }

@@ -1,24 +1,39 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.Create;
 
-public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
+public class CreateProjectRequestHandler(
+    IValidator<CreateProjectRequest> validator,
+    ICurrentUser currentUser,
+    TemplateDbContext templateDbContext)
+    : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
 {
-    private readonly Guid _currentUserId = Guid.NewGuid(); // pretend current user
+    private readonly IValidator<CreateProjectRequest> _validator = validator;
+    private readonly ICurrentUser _currentUser = currentUser;
+    private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+    async Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
-        var project = new Project(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
+        var validationResult = _validator.Validate(request);
+        if (!validationResult.IsValid)
+        {
+            return new Result<CreateProjectResponse?>(new ResultException(validationResult.Errors));
+        }
+
+        var project = Project.Create(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
         
         if (request.AdminUserId.HasValue)
         {
             project.AddProjectAdminUser(request.AdminUserId.Value);
         }
 
-        if (request.AdminUserId.HasValue && request.AdminUserId.Value != _currentUserId)
+        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != _currentUser.UserId) || !request.AdminUserId.HasValue)
         {
-            project.AddProjectUser(_currentUserId);
+            project.AddProjectUser(_currentUser.UserId);
         }
 
+        await _templateDbContext.Project.AddAsync(project, cancellationToken);
+        await _templateDbContext.SaveChangesAsync(cancellationToken);
+
         var result = new Result<CreateProjectResponse?>(project.Map());
-        return Task.FromResult(result);
+        return result;
     }
 }

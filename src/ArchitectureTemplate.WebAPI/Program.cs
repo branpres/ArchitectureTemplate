@@ -6,6 +6,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRequestHandlers();
 builder.Services.AddDomainEvents();
+builder.Services.AddValidatorsFromAssembly(System.Reflection.Assembly.Load("ArchitectureTemplate.Application"));
+
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+
+builder.Services.AddDbContext<TemplateDbContext>(options =>
+{
+    var connection = new SqliteConnection("Data Source=TemplateDB;Mode=Memory;Cache=Shared");
+    connection.Open();
+    options.UseSqlite(connection);
+    options.EnableSensitiveDataLogging();
+});
 
 var app = builder.Build();
 
@@ -19,5 +30,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapEndpoints();
+
+using var scope = app.Services.CreateScope();
+using var dbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext>();
+await dbContext.Database.EnsureCreatedAsync();
 
 app.Run();

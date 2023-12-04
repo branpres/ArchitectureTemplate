@@ -1,4 +1,5 @@
-﻿global using ArchitectureTemplate.Application.DomainEvents;
+﻿global using ArchitectureTemplate.Application.Data;
+global using ArchitectureTemplate.Application.DomainEvents;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
 global using ArchitectureTemplate.Application.UseCases.Projects.ResponseMappers;
@@ -6,5 +7,6 @@ global using ArchitectureTemplate.Domain.Common;
 global using ArchitectureTemplate.Domain.DomainEvents;
 global using ArchitectureTemplate.Domain.Interfaces;
 global using ArchitectureTemplate.Domain.Projects;
+global using FluentValidation;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;

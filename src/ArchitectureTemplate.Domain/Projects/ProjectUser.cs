@@ -2,6 +2,8 @@
 
 public class ProjectUser: DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
+    private ProjectUser() { }
+
     private ProjectUser(Project project, Guid userId, bool isAdmin = false)
     {
         Project = project;
@@ -13,7 +15,7 @@ public class ProjectUser: DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 
     public Guid ProjectId { get; private set; }
 
-    public Project Project { get; private set; }
+    public Project? Project { get; private set; }
 
     public Guid UserId { get; private set; }
 

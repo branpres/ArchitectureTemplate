@@ -7,4 +7,4 @@ public record CreateProjectResponse(
     Guid CompanyId,
     string ProjectName,
     string? ProjectIdentifier,
-    List<CreateProjectUserResponse>? CreateProjectUserResponses);
+    List<CreateProjectUserResponse>? ProjectUsers);

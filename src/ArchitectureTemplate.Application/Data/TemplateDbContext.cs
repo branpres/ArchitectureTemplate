@@ -1,7 +1,12 @@
 ﻿namespace ArchitectureTemplate.Application.Data;
 
-public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher domainEventDispatcher) : DbContext(options)
+public class TemplateDbContext(
+    DbContextOptions options,
+    ICurrentUser currentUser,
+    IDomainEventDispatcher domainEventDispatcher) : DbContext(options)
 {
+    private readonly ICurrentUser _currentUser = currentUser;
+
     private readonly IDomainEventDispatcher _domainEventDispatcher = domainEventDispatcher;
 
     public DbSet<Project> Project { get; set; }
@@ -22,12 +27,12 @@ public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher 
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = Guid.NewGuid(); // pretending we have a user
+                    entry.Entity.CreatedBy = _currentUser.UserId;
                     entry.Entity.CreatedOn = DateTime.UtcNow;
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = Guid.NewGuid(); // pretending we have a user
+                    entry.Entity.UpdatedBy = _currentUser.UserId;
                     entry.Entity.UpdatedOn = DateTime.UtcNow;
                     break;
             }
@@ -40,7 +45,7 @@ public class TemplateDbContext(DbContextOptions options, IDomainEventDispatcher 
                 case EntityState.Modified:
                     if (entry.Entity.IsDeleted)
                     {
-                        entry.Entity.DeletedBy = Guid.NewGuid(); // pretending we have a user
+                        entry.Entity.DeletedBy = _currentUser.UserId;
                         entry.Entity.DeletedOn = DateTime.UtcNow;
                     }
                     break;

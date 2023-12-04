@@ -1,17 +1,26 @@
-﻿namespace ArchitectureTemplate.Domain.Projects;
+﻿using ArchitectureTemplate.Domain.Projects.DomainEvents;
 
-public class Project(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
-    : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
+namespace ArchitectureTemplate.Domain.Projects;
+
+public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
+    private Project(Guid companyId, string projectName, Guid? projectTypeId, string? projectIdentifier)
+    {
+        CompanyId = companyId;
+        ProjectName = projectName;
+        ProjectTypeId = projectTypeId;
+        ProjectIdentifier = projectIdentifier;
+    }
+
     public Guid ProjectId { get; private set; }
 
-    public Guid CompanyId { get; private set; } = companyId;
+    public Guid CompanyId { get; private set; }
 
-    public string ProjectName { get; private set; } = projectName;
+    public string ProjectName { get; private set; }
 
-    public Guid? ProjectTypeId { get; private set; } = projectTypeId;
+    public Guid? ProjectTypeId { get; private set; }
 
-    public string? ProjectIdentifier { get; private set; } = projectIdentifier;
+    public string? ProjectIdentifier { get; private set; }
 
     public List<ProjectUser>? ProjectUsers { get; private set; }
 
@@ -28,6 +37,14 @@ public class Project(Guid companyId, string projectName, Guid? projectTypeId = n
     public DateTime? DeletedOn { get; set; }
 
     public Guid? DeletedBy { get; set; }
+
+    public static Project Create(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
+    {
+        var project = new Project(companyId, projectName, projectTypeId, projectIdentifier);
+        project.RegisterDomainEvent(new ProjectCreatedDomainEvent(project));
+
+        return project;
+    }
 
     public void AddProjectUser(Guid userId)
     {
