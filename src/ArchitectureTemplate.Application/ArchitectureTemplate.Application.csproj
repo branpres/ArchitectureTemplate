@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>	
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,10 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ArchitectureTemplate.Domain\ArchitectureTemplate.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Configurations\" />
   </ItemGroup>
 
 </Project>

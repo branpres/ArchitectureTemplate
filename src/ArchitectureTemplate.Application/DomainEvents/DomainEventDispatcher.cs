@@ -12,11 +12,6 @@ public class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEv
     public async Task DispatchDomainEvents(List<DomainEventEntityBase> entities)
     {
         var domainEvents = entities.SelectMany(x => x.DomainEvents).ToList();
-        await DispatchDomainEventsAsync(domainEvents);
-    }
-
-    private async Task DispatchDomainEventsAsync(List<IDomainEvent> domainEvents)
-    {
         if (domainEvents.Count != 0)
         {
             foreach (var domainEvent in domainEvents)

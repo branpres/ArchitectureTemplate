@@ -18,6 +18,20 @@ public class CreateProjectRequestHandler(
             return new Result<CreateProjectResponse?>(new ResultException(validationResult.Errors));
         }
 
+        var invalidCreateDataException = new ResultException();
+        if (await _templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName))
+        {
+            invalidCreateDataException.AddError("ProjectName", "Project name already exists for this company.");
+        }
+        if (request.ProjectIdentifier != null && !await _templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier))
+        {
+            invalidCreateDataException.AddError("ProjectIdentifier", "Project identifier already exists for this company.");
+        }
+        if (invalidCreateDataException.Errors.Count > 0)
+        {
+            return new Result<CreateProjectResponse?>(invalidCreateDataException);
+        }        
+
         var project = Project.Create(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
         
         if (request.AdminUserId.HasValue)

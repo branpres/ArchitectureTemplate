@@ -4,6 +4,12 @@ public class CreateProjectRequestValidator : AbstractValidator<CreateProjectRequ
 {
     public CreateProjectRequestValidator()
     {
-        RuleFor(x => x.ProjectName).NotEmpty();
+        RuleFor(x => x.CompanyId).NotEmpty();
+        RuleFor(x => x.ProjectName)
+            .NotEmpty()
+            .MaximumLength(64);
+
+        RuleFor(x => x.ProjectIdentifier)
+            .MaximumLength(64);
     }
 }

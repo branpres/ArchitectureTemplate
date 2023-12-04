@@ -6,6 +6,8 @@ public class ResultException : Exception
 
     public Dictionary<string, string[]> Errors => _errors.ToDictionary(x => x.Key, x => x.Value.ToArray());
 
+    public ResultException() : base() { }
+
     public ResultException(string propertyName, string errorMessage) : base()
     {
         _errors.Add(propertyName, [errorMessage]);
