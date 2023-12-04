@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Interfaces;
+﻿namespace ArchitectureTemplate.Domain.Common.Interfaces;
 
 public interface IDeleteMetadata
 {
