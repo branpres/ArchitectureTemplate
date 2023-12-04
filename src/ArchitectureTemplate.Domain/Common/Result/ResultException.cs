@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Common;
+﻿namespace ArchitectureTemplate.Domain.Common.Result;
 
 public class ResultException : Exception
 {

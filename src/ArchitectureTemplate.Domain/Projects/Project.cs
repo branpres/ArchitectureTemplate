@@ -1,6 +1,4 @@
-﻿using ArchitectureTemplate.Domain.Projects.DomainEvents;
-
-namespace ArchitectureTemplate.Domain.Projects;
+﻿namespace ArchitectureTemplate.Domain.Projects;
 
 public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {

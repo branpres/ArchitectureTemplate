@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.DomainEvents;
+﻿namespace ArchitectureTemplate.Domain.Common.DomainEvents;
 
 public abstract class DomainEventEntityBase
 {

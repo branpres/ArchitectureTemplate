@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Common;
+﻿namespace ArchitectureTemplate.Domain.Common.Result;
 
 public class Result<T>
 {
@@ -24,4 +24,4 @@ public class Result<T>
 
     public TResult Match<TResult>(Func<T, TResult> success, Func<ResultException, TResult> error)
         => IsSuccess ? success(_value!) : error(_exception!);
-} 
+}
