@@ -13,6 +13,10 @@ public class TemplateDbContext(
 
     public DbSet<ProjectUser> ProjectUser {  get; set; }
 
+    public DbSet<BillOfMaterials> BillOfMaterials { get; set; }
+
+    public DbSet<ScopePackage> ScopePackage { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
