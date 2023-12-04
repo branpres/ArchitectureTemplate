@@ -31,14 +31,26 @@ public class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEv
                     }
                 }
             }
+
+            await PersistDomainEvents(templateDbContext, domainEvents);
         }
     }
 
-    private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(DbContext dbContext)
+    private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(TemplateDbContext templateDbContext)
     {
-        return dbContext.ChangeTracker.Entries<DomainEventEntityBase>()
+        return templateDbContext.ChangeTracker.Entries<DomainEventEntityBase>()
             .Where(x => x.Entity.DomainEvents.Count != 0)
             .Select(x => x.Entity)
             .ToList();
+    }
+
+    private async static Task PersistDomainEvents(TemplateDbContext templateDbContext, List<IDomainEvent> domainEvents)
+    {
+        await templateDbContext.OutboxMessage.AddRangeAsync(
+            domainEvents
+            .Select(x =>
+                new OutboxMessage(
+                    x.GetType().Name,
+                    JsonConvert.SerializeObject(x, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }))));
     }
 }

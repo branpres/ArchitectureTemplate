@@ -17,6 +17,8 @@ public class TemplateDbContext(
 
     public DbSet<ScopePackage> ScopePackage { get; set; }
 
+    public DbSet<OutboxMessage> OutboxMessage { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());

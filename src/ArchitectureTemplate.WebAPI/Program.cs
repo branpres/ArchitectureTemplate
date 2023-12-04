@@ -8,6 +8,8 @@ builder.Services.AddRequestHandlers();
 builder.Services.AddDomainEvents();
 builder.Services.AddValidatorsFromAssembly(System.Reflection.Assembly.Load("ArchitectureTemplate.Application"));
 
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddDbContext<TemplateDbContext>(options =>

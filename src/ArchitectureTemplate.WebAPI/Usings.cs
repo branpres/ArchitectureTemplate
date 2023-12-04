@@ -8,3 +8,4 @@ global using ArchitectureTemplate.WebAPI.Endpoints;
 global using FluentValidation;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
+global using Newtonsoft.Json;
