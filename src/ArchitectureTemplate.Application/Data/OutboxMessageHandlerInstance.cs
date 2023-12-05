@@ -1,14 +1,22 @@
 ﻿namespace ArchitectureTemplate.Application.Data;
 
-public class OutboxMessageHandlerInstance(OutboxMessage outboxMessage, string handlerName) : IBasicMetadata
+public class OutboxMessageHandlerInstance: IBasicMetadata
 {
+    private OutboxMessageHandlerInstance() { }
+
+    private OutboxMessageHandlerInstance(OutboxMessage outboxMessage, string handlerName)
+    {
+        OutboxMessage = outboxMessage;
+        HandlerName = handlerName;
+    }
+
     public Guid OutboxMessageHandlerInstanceId { get; private set; }
 
     public Guid OutboxMessageId { get; private set; }
 
-    public OutboxMessage? OutboxMessage { get; } = outboxMessage;
+    public OutboxMessage? OutboxMessage { get; }
 
-    public string HandlerName { get; private set; } = handlerName;
+    public string? HandlerName { get; private set; }
 
     public OutboxMessageHandlerInstanceStatus OutboxMessageHandlerInstanceStatus { get; private set; } = OutboxMessageHandlerInstanceStatus.NotExecuted;
 
@@ -19,6 +27,8 @@ public class OutboxMessageHandlerInstance(OutboxMessage outboxMessage, string ha
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public static OutboxMessageHandlerInstance CreateInstance(OutboxMessage outboxMessage, string handlerName) => new(outboxMessage, handlerName);
 
     public void MarkSucceeded()
     {

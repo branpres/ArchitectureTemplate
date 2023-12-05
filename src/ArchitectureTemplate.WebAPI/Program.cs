@@ -17,7 +17,12 @@ builder.Services.AddDbContext<TemplateDbContext>(options =>
     var connection = new SqliteConnection("Data Source=TemplateDB;Mode=Memory;Cache=Shared");
     connection.Open();
     options.UseSqlite(connection);
-    options.EnableSensitiveDataLogging();
+    options.EnableSensitiveDataLogging();    
+});
+
+builder.Services.Configure<ILogger>(x =>
+{
+    
 });
 
 builder.Services.AddHostedService<DomainEventOutboxProcessor>();

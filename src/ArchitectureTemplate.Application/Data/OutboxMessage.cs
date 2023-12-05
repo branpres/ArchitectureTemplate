@@ -10,7 +10,7 @@ public class OutboxMessage(string type, string content) : IBasicMetadata
 
     public OutboxMessageStatus OutboxMessageStatus { get; private set; } = OutboxMessageStatus.NotProcessed;
 
-    public int NumberOfRetries { get; private set; }
+    public int NumberOfTries { get; private set; }
 
     public List<OutboxMessageHandlerInstance> OutboxMessageHandlerInstances { get; private set; } = [];
 

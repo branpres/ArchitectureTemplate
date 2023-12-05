@@ -4,7 +4,7 @@ public class CreateEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/project", CreateProject)
+        builder.MapPost("/project", Create)
             .WithOpenApi(x => new(x)
             {
                 OperationId = "CreateProject",
@@ -16,7 +16,7 @@ public class CreateEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> CreateProject(
+    private async Task<IResult> Create(
         CreateProjectRequest request,
         IRequestHandler<CreateProjectRequest, CreateProjectResponse> handler,
         CancellationToken cancellationToken)

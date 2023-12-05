@@ -5,9 +5,9 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
     private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
     private readonly ILogger<DomainEventOutboxProcessor> _logger = logger;
 
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(10));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
 
-    private const int MAX_NUMBER_OF_RETRIES = 5;
+    private const int MAX_NUMBER_OF_TRIES = 5;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -20,7 +20,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
             var notProcessedOutboxMessagesQuery = templateDbContext.OutboxMessage
                 .Include(x => x.OutboxMessageHandlerInstances.Where(x => x.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded))
                 .Where(x => (x.OutboxMessageStatus == OutboxMessageStatus.NotProcessed || x.OutboxMessageStatus == OutboxMessageStatus.ProcessingFailed)
-                    && x.NumberOfRetries < MAX_NUMBER_OF_RETRIES);
+                    && x.NumberOfTries <= MAX_NUMBER_OF_TRIES);
             var notProcessedOutboxMessages = await notProcessedOutboxMessagesQuery.ToListAsync(stoppingToken);
 
             await notProcessedOutboxMessagesQuery.ExecuteUpdateAsync(x => x.SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.Processing), stoppingToken);
@@ -29,7 +29,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
             {
                 try
                 {
-                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content);
+                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                     if (domainEvent != null)
                     {
                         var domainEventOutboxMessageHandlerType = typeof(IDomainEventOutboxMessageHandler<>).MakeGenericType(domainEvent.GetType());
@@ -46,7 +46,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                                     var outboxMessageHandlerInstance = outboxMessage.OutboxMessageHandlerInstances.FirstOrDefault(x => x.HandlerName == handlerName);
                                     if (outboxMessageHandlerInstance == null)
                                     {
-                                        outboxMessageHandlerInstance = new OutboxMessageHandlerInstance(outboxMessage, handlerName);
+                                        outboxMessageHandlerInstance = OutboxMessageHandlerInstance.CreateInstance(outboxMessage, handlerName);
                                         outboxMessage.AddOutboxMessageHandlerInstance(outboxMessageHandlerInstance);
                                     }
 
@@ -59,7 +59,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                                     {
                                         outboxMessageHandlerInstance.MarkFailed();
 
-                                        _logger.LogError(ex, "Exception occurred while processing outbox message.");
+                                        _logger.LogError(ex, "Exception occurred when invoking outbox message handler.");
                                     }
                                 }
                             }
@@ -72,14 +72,20 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                             : OutboxMessageStatus.ProcessingFailed;
 
                     await templateDbContext.OutboxMessage.Where(x => x.OutboxMessageId == outboxMessage.OutboxMessageId)
-                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.OutboxMessageStatus, outboxMessageStatus), stoppingToken);
+                        .ExecuteUpdateAsync(x => x
+                            .SetProperty(y => y.OutboxMessageStatus, outboxMessageStatus)
+                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1),
+                            stoppingToken);
                 }
                 catch (Exception ex)
                 {
                     await templateDbContext.OutboxMessage.Where(x => x.OutboxMessageId == outboxMessage.OutboxMessageId)
-                        .ExecuteUpdateAsync(x => x.SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.ProcessingFailed), stoppingToken);
+                        .ExecuteUpdateAsync(x => x
+                            .SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.ProcessingFailed)
+                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1),
+                            stoppingToken);
 
-                    _logger.LogError(ex, "Exception occurred while processing outbox message.");
+                    _logger.LogError(ex, "Exception occurred when processing outbox message.");
                 }
             }
 

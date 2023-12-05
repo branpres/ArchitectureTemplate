@@ -2,6 +2,8 @@
 
 public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
+    protected Project() { }
+
     private Project(Guid companyId, string projectName, Guid? projectTypeId, string? projectIdentifier)
     {
         CompanyId = companyId;
@@ -14,7 +16,7 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 
     public Guid CompanyId { get; private set; }
 
-    public string ProjectName { get; private set; }
+    public string? ProjectName { get; private set; }
 
     public Guid? ProjectTypeId { get; private set; }
 
