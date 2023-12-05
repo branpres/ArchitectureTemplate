@@ -13,7 +13,7 @@ public class CreateProjectRequestHandler(
     async Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = await Validate(request, cancellationToken);
-        if (!validationResult.IsSuccess)
+        if (!validationResult.IsValid)
         {
             return validationResult.Result!;
         }
@@ -23,11 +23,11 @@ public class CreateProjectRequestHandler(
         await _templateDbContext.Project.AddAsync(project, cancellationToken);
         await _templateDbContext.SaveChangesAsync(cancellationToken);
 
-        var result = new Result<CreateProjectResponse?>(project.Map());
+        var result = new Result<CreateProjectResponse?>(project.MapToCreateProjectResponse());
         return result;
     }
 
-    private async Task<(bool IsSuccess, Result<CreateProjectResponse?>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
+    private async Task<(bool IsValid, Result<CreateProjectResponse?>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = _validator.Validate(request);
         if (!validationResult.IsValid)

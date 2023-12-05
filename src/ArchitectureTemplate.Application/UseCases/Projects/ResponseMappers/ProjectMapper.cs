@@ -2,7 +2,27 @@
 
 public static class ProjectMapper
 {
-    public static CreateProjectResponse Map(this Project project)
+    public static CreateProjectResponse MapToCreateProjectResponse(this Project project)
+    {
+        return new CreateProjectResponse(
+            project.ProjectId,
+            project.CompanyId,
+            project.ProjectName!,
+            project.ProjectIdentifier,
+            MapCreateProjectUserResponses(project));
+    }
+
+    public static GetProjectByIdResponse MapToGetProjectByIdResponse(this Project project)
+    {
+        return new GetProjectByIdResponse(
+            project.ProjectId,
+            project.CompanyId,
+            project.ProjectName!,
+            project.ProjectIdentifier,
+            MapCreateProjectUserResponses(project));
+    }
+
+    private static List<CreateProjectUserResponse>? MapCreateProjectUserResponses(Project project)
     {
         List<CreateProjectUserResponse>? createProjectUserResponses = null;
         if (project.ProjectUsers != null && project.ProjectUsers.Count != 0)
@@ -12,11 +32,6 @@ public static class ProjectMapper
                 .ToList();
         }
 
-        return new CreateProjectResponse(
-            project.ProjectId,
-            project.CompanyId,
-            project.ProjectName,
-            project.ProjectIdentifier,
-            createProjectUserResponses);
+        return createProjectUserResponses;
     }
 }
