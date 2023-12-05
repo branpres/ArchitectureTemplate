@@ -9,3 +9,4 @@ global using FluentValidation;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
 global using Newtonsoft.Json;
+global using System.Net;

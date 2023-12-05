@@ -24,10 +24,21 @@ public class CreateEndpoint : IEndpoint
         var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
-            response => Results.Created("", response),
-            exception => Results.BadRequest(
-                exception.Errors != null
-                    ? new HttpValidationProblemDetails(exception.Errors)
+            createProjectResponse => Created(createProjectResponse!),
+            resultException => Results.BadRequest(
+                resultException.Errors != null
+                    ? new HttpValidationProblemDetails(resultException.Errors)
                     : new HttpValidationProblemDetails()));
+    }
+
+    private static IResult Created(CreateProjectResponse createProjectResponse)
+    {
+        var links = new List<Link>
+        {
+            { new Link("GetById", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new Link("Delete", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) }
+        };
+
+        return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse.Map(links));
     }
 }
