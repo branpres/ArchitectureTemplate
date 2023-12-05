@@ -12,6 +12,8 @@ public class OutboxMessage(string type, string content) : IBasicMetadata
 
     public int NumberOfRetries { get; private set; }
 
+    public List<OutboxMessageHandlerInstance> OutboxMessageHandlerInstances { get; private set; } = [];
+
     public DateTime CreatedOn { get; set; }
 
     public Guid CreatedBy { get; set; }
@@ -19,6 +21,11 @@ public class OutboxMessage(string type, string content) : IBasicMetadata
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public void AddOutboxMessageHandlerInstance(OutboxMessageHandlerInstance instance)
+    {
+        OutboxMessageHandlerInstances.Add(instance);
+    }
 }
 
 public enum OutboxMessageStatus

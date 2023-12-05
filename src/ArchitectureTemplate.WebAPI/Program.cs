@@ -20,6 +20,8 @@ builder.Services.AddDbContext<TemplateDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddHostedService<DomainEventOutboxProcessor>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

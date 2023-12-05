@@ -15,7 +15,7 @@ public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadat
 
     public Guid ProjectId { get; private set; }
 
-    public Project? Project { get; private set; }
+    public Project? Project { get; set; }
 
     public Guid UserId { get; private set; }
 

@@ -18,7 +18,7 @@ public class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEv
             foreach (var domainEvent in domainEvents)
             {
                 var domainEventHandlerType = typeof(IDomainEventHandler<>).MakeGenericType(domainEvent.GetType());
-                var handleDomainEventAsyncMethod = domainEventHandlerType.GetMethod("Handle");
+                var handleMethod = domainEventHandlerType.GetMethod("Handle");
                 var domainEventHandlers = _serviceProvider.GetServices(domainEventHandlerType);
                 if (domainEventHandlers != null && domainEventHandlers.Any())
                 {
@@ -26,7 +26,7 @@ public class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEv
                     {
                         if (domainEventHandler != null)
                         {
-                            await handleDomainEventAsyncMethod?.Invoke((dynamic)domainEventHandler, new object[] { domainEvent });
+                            await handleMethod?.Invoke((dynamic)domainEventHandler, new object[] { domainEvent });
                         }
                     }
                 }
