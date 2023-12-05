@@ -6,7 +6,7 @@ internal static class Queries
     {
         return !await project
             .AsNoTracking()
-            .AnyAsync(x => x.CompanyId == companyId && x.ProjectName.ToUpper() == projectName.ToUpper(), cancellationToken);
+            .AnyAsync(x => x.CompanyId == companyId && x.ProjectName!.ToUpper() == projectName.ToUpper(), cancellationToken);
     }
 
     public async static Task<bool> IsProjectIdentifierAvailable(this IQueryable<Project> project, Guid companyId, string projectIdentifier, CancellationToken cancellationToken)
