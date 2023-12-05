@@ -37,7 +37,8 @@ public class CreateEndpoint : IEndpoint
         {
             { new Link("GetProjectById", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
             { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
-            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) }
+            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new Link("ScopeByProjectId", $"/scopepackage/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
         };
 
         return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse.Map(links));

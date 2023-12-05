@@ -33,7 +33,8 @@ public class GetByIdEndpoint : IEndpoint
         var links = new List<Link>
         {
             { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
-            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) }
+            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new Link("ScopeByProjectId", $"/scopepackage/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) }
         };
 
         return Results.Ok(createProjectResponse.Map(links));
