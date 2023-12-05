@@ -47,12 +47,21 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public void AddProjectUser(Guid userId)
     {
         ProjectUsers ??= [];
-        ProjectUsers.Add(ProjectUser.CreateNonAdminUser(this, userId));
+
+        var projectUser = ProjectUser.CreateNonAdminUser(this, userId);
+        projectUser.RegisterDomainEvent(new ProjectUserAddedDomainEvent(projectUser));
+
+        ProjectUsers.Add(projectUser);
     }
 
     public void AddProjectAdminUser(Guid userId)
     {
         ProjectUsers ??= [];
-        ProjectUsers.Add(ProjectUser.CreateAdminUser(this, userId));
+
+        var projectUser = ProjectUser.CreateAdminUser(this, userId);
+        projectUser.RegisterDomainEvent(new ProjectUserAddedDomainEvent(projectUser));
+        projectUser.RegisterDomainEvent(new ProjectAdminUserAddedDomainEvent(projectUser));
+
+        ProjectUsers.Add(projectUser);
     }
 }
