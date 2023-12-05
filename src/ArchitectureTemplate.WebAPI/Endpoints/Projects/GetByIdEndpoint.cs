@@ -24,7 +24,18 @@ public class GetByIdEndpoint : IEndpoint
         var result = await handler.Handle(id, cancellationToken);
 
         return result.Match(
-            getProjectByIdResponse => Results.Ok(getProjectByIdResponse!),
+            getProjectByIdResponse => Ok(getProjectByIdResponse!),
             notFoundException => Results.NotFound());
+    }
+
+    private static IResult Ok(GetProjectByIdResponse createProjectResponse)
+    {
+        var links = new List<Link>
+        {
+            { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
+            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) }
+        };
+
+        return Results.Ok(createProjectResponse.Map(links));
     }
 }

@@ -66,4 +66,18 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 
         ProjectUsers.Add(projectUser);
     }
+
+    public void SoftDelete()
+    {
+        if (ProjectUsers != null)
+        {
+            foreach (var projectUser in ProjectUsers)
+            {
+                projectUser.SoftDelete();
+            }
+        }
+
+        SoftDelete();
+        RegisterDomainEvent(new ProjectDeletedDomainEvent(this));
+    }
 }

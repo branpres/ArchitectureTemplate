@@ -25,3 +25,26 @@ public class Result<T>
     public TResult Match<TResult>(Func<T, TResult> success, Func<ResultException, TResult> error)
         => IsSuccess ? success(_value!) : error(_exception!);
 }
+
+public class Result
+{
+    private readonly ResultException? _exception;
+
+    public Result()
+    {
+        _exception = null;
+        IsSuccess = true;
+    }
+
+    public Result(ResultException exception)
+    {
+        _exception = exception;
+    }
+
+    public bool IsSuccess { get; }
+
+    public bool IsError => !IsSuccess;
+
+    public TResult Match<TResult>(Func<TResult> success, Func<ResultException, TResult> error)
+        => IsSuccess ? success() : error(_exception!);
+}

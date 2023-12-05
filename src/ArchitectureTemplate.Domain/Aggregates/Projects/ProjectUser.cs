@@ -38,4 +38,9 @@ public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadat
     public static ProjectUser CreateAdminUser(Project project, Guid userId) => new(project, userId, true);
 
     public static ProjectUser CreateNonAdminUser(Project project, Guid userId) => new(project, userId);
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+    }
 }
