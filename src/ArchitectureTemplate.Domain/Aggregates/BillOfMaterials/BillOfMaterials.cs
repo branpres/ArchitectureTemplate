@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.BillOfMaterials;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.BillOfMaterials;
 
 public class BillOfMaterials()
 {

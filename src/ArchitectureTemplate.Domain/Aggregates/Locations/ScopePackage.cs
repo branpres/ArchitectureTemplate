@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Locations;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.Locations;
 
 public class ScopePackage
 {

@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Projects;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.Projects;
 
 public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {

@@ -1,6 +1,6 @@
-﻿namespace ArchitectureTemplate.Domain.Projects;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.Projects;
 
-public class ProjectUser: DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
+public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
     private ProjectUser() { }
 
