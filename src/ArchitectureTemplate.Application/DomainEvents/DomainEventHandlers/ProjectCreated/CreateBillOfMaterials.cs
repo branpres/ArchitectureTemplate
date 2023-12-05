@@ -9,7 +9,7 @@ internal class CreateBillOfMaterials(TemplateDbContext templateDbContext) : IDom
         var billOfMaterials = new BillOfMaterials
         {
             ProjectId = domainEvent.Project.ProjectId,
-            BillOfMaterialsName = domainEvent.Project.ProjectName
+            BillOfMaterialsName = domainEvent.Project.ProjectName!
         };
 
         await _templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);

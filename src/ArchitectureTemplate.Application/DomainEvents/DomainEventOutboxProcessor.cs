@@ -23,7 +23,10 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                     && x.NumberOfTries <= MAX_NUMBER_OF_TRIES);
             var notProcessedOutboxMessages = await notProcessedOutboxMessagesQuery.ToListAsync(stoppingToken);
 
-            await notProcessedOutboxMessagesQuery.ExecuteUpdateAsync(x => x.SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.Processing), stoppingToken);
+            await notProcessedOutboxMessagesQuery.ExecuteUpdateAsync(x => x
+                .SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.Processing)
+                .SetProperty(y => y.UpdatedOn, DateTime.UtcNow),
+                stoppingToken);
 
             foreach (var outboxMessage in notProcessedOutboxMessages)
             {
@@ -74,7 +77,8 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                     await templateDbContext.OutboxMessage.Where(x => x.OutboxMessageId == outboxMessage.OutboxMessageId)
                         .ExecuteUpdateAsync(x => x
                             .SetProperty(y => y.OutboxMessageStatus, outboxMessageStatus)
-                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1),
+                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1)
+                            .SetProperty(y => y.UpdatedOn, DateTime.UtcNow),
                             stoppingToken);
                 }
                 catch (Exception ex)
@@ -82,14 +86,18 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                     await templateDbContext.OutboxMessage.Where(x => x.OutboxMessageId == outboxMessage.OutboxMessageId)
                         .ExecuteUpdateAsync(x => x
                             .SetProperty(y => y.OutboxMessageStatus, OutboxMessageStatus.ProcessingFailed)
-                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1),
+                            .SetProperty(y => y.NumberOfTries, outboxMessage.NumberOfTries + 1)
+                            .SetProperty(y => y.UpdatedOn, DateTime.UtcNow),
                             stoppingToken);
 
                     _logger.LogError(ex, "Exception occurred when processing outbox message.");
                 }
             }
 
-            await templateDbContext.SaveChangesAsync(stoppingToken);
+            if (notProcessedOutboxMessages.Count > 0)
+            {
+                await templateDbContext.SaveChangesAsync(stoppingToken);
+            }
         }
     }
 }

@@ -20,11 +20,6 @@ builder.Services.AddDbContext<TemplateDbContext>(options =>
     options.EnableSensitiveDataLogging();    
 });
 
-builder.Services.Configure<ILogger>(x =>
-{
-    
-});
-
 builder.Services.AddHostedService<DomainEventOutboxProcessor>();
 
 var app = builder.Build();

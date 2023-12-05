@@ -28,6 +28,8 @@ public class TemplateDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
     {
+        await _domainEventDispatcher.DispatchDomainEvents(this);
+
         foreach (var entry in ChangeTracker.Entries<IBasicMetadata>())
         {
             switch (entry.State)
@@ -57,8 +59,6 @@ public class TemplateDbContext(
                     break;
             }
         }
-
-        await _domainEventDispatcher.DispatchDomainEvents(this);
 
         var result = await base.SaveChangesAsync(cancellationToken);
 
