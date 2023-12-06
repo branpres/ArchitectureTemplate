@@ -26,6 +26,11 @@ public class GetByProjectIdEndpoint : IEndpoint
 
         return result.Match(
             getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse!.Map()),
-            notFoundException => Results.NotFound());
+            resultProblem => resultProblem is NotFoundResultProblem
+                ? Results.NotFound()
+                : Results.BadRequest(
+                    resultProblem.Errors.Count > 0
+                    ? new HttpValidationProblemDetails(resultProblem.Errors)
+                    : new HttpValidationProblemDetails()));
     }
 }

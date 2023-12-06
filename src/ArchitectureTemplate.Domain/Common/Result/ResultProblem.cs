@@ -1,19 +1,19 @@
 ﻿namespace ArchitectureTemplate.Domain.Common.Result;
 
-public class ResultException : Exception
+public class ResultProblem
 {
     private readonly Dictionary<string, List<string>> _errors = [];
 
     public Dictionary<string, string[]> Errors => _errors.ToDictionary(x => x.Key, x => x.Value.ToArray());
 
-    public ResultException() : base() { }
+    public ResultProblem() { }
 
-    public ResultException(string propertyName, string errorMessage) : base()
+    public ResultProblem(string propertyName, string errorMessage)
     {
         _errors.Add(propertyName, [errorMessage]);
     }
 
-    public ResultException(List<ValidationFailure> validationFailures) : base()
+    public ResultProblem(List<ValidationFailure> validationFailures)
     {
         foreach (var validationFailure in validationFailures)
         {
@@ -29,11 +29,13 @@ public class ResultException : Exception
 
     public void AddError(string propertyName, string errorMessage)
     {
-        _errors.Add(propertyName, [errorMessage]);
-    }
-
-    public void AddError(string propertyName, List<string> errorMessages)
-    {
-        _errors.Add(propertyName, errorMessages);
+        if (_errors.TryGetValue(propertyName, out List<string>? errorMessages))
+        {
+            errorMessages.Add(errorMessage);
+        }
+        else
+        {
+            _errors[propertyName] = [errorMessage];
+        }
     }
 }

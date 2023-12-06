@@ -3,48 +3,46 @@
 public class Result<T>
 {
     private readonly T? _value;
-    private readonly ResultException? _exception;
+    private readonly ResultProblem? _problem = null;
 
     public Result(T value)
     {
         _value = value;
-        _exception = null;
         IsSuccess = true;
     }
 
-    public Result(ResultException exception)
+    public Result(ResultProblem problem)
     {
         _value = default;
-        _exception = exception;
+        _problem = problem;
     }
 
     public bool IsSuccess { get; }
 
     public bool IsError => !IsSuccess;
 
-    public TResult Match<TResult>(Func<T, TResult> success, Func<ResultException, TResult> error)
-        => IsSuccess ? success(_value!) : error(_exception!);
+    public TResult Match<TResult>(Func<T, TResult> success, Func<ResultProblem, TResult> error)
+        => IsSuccess ? success(_value!) : error(_problem!);
 }
 
 public class Result
 {
-    private readonly ResultException? _exception;
+    private readonly ResultProblem? _problem = null;
 
     public Result()
     {
-        _exception = null;
         IsSuccess = true;
     }
 
-    public Result(ResultException exception)
+    public Result(ResultProblem problem)
     {
-        _exception = exception;
+        _problem = problem;
     }
 
     public bool IsSuccess { get; }
 
     public bool IsError => !IsSuccess;
 
-    public TResult Match<TResult>(Func<TResult> success, Func<ResultException, TResult> error)
-        => IsSuccess ? success() : error(_exception!);
+    public TResult Match<TResult>(Func<TResult> success, Func<ResultProblem, TResult> error)
+        => IsSuccess ? success() : error(_problem!);
 }

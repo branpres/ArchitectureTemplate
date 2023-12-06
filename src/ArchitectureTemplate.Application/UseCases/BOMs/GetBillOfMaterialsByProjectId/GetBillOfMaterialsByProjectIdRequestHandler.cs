@@ -12,7 +12,7 @@ internal class GetBillOfMaterialsByProjectIdRequestHandler(TemplateDbContext tem
 
         if (billOfMaterials == null)
         {
-            return new Result<GetBillOfMaterialsByProjectIdResponse?>(new NotFoundException());
+            return new Result<GetBillOfMaterialsByProjectIdResponse?>(new NotFoundResultProblem());
         }
 
         return new Result<GetBillOfMaterialsByProjectIdResponse?>(billOfMaterials.MapToResponse());

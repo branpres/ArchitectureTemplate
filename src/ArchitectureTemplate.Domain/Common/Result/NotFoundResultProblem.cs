@@ -1,5 +1,5 @@
 ﻿namespace ArchitectureTemplate.Domain.Common.Result;
 
-public class NotFoundException : ResultException
+public class NotFoundResultProblem : ResultProblem
 {
 }

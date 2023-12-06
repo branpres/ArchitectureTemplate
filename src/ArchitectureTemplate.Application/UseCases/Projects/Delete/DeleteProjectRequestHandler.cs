@@ -10,7 +10,7 @@ public class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : 
 
         if (project == null)
         {
-            return new Result(new NotFoundException());
+            return new Result(new NotFoundResultProblem());
         }
 
         return new Result();

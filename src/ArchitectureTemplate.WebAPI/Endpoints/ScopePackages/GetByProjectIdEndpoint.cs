@@ -25,6 +25,8 @@ public class GetByProjectIdEndpoint : IEndpoint
 
         return result.Match(
             getScopePackageByProjectIdResponse => Results.Ok(getScopePackageByProjectIdResponse),
-            none => Results.Ok());
+            resultProblem => resultProblem.Errors.Count > 0 
+                ? Results.BadRequest(new HttpValidationProblemDetails(resultProblem.Errors))
+                : Results.Ok());
     }
 }

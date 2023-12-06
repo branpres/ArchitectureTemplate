@@ -26,9 +26,9 @@ public class CreateEndpoint : IEndpoint
 
         return result.Match(
             createProjectResponse => Created(createProjectResponse!),
-            resultException => Results.BadRequest(
-                resultException.Errors != null
-                    ? new HttpValidationProblemDetails(resultException.Errors)
+            resultProblem => Results.BadRequest(
+                resultProblem.Errors.Count > 0
+                    ? new HttpValidationProblemDetails(resultProblem.Errors)
                     : new HttpValidationProblemDetails()));
     }
 

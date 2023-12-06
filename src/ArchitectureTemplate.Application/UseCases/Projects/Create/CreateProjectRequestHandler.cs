@@ -32,24 +32,24 @@ public class CreateProjectRequestHandler(
         var validationResult = _validator.Validate(request);
         if (!validationResult.IsValid)
         {
-            return (false, new Result<CreateProjectResponse?>(new ResultException(validationResult.Errors)));
+            return (false, new Result<CreateProjectResponse?>(new ResultProblem(validationResult.Errors)));
         }
 
-        var invalidCreateDataException = new ResultException();
+        var invalidCreateDataResultProblem = new ResultProblem();
 
         if (!await _templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName, cancellationToken))
         {
-            invalidCreateDataException.AddError("ProjectName", "Project name already exists for this company.");
+            invalidCreateDataResultProblem.AddError("ProjectName", "Project name already exists for this company.");
         }
 
         if (request.ProjectIdentifier != null && !await _templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier, cancellationToken))
         {
-            invalidCreateDataException.AddError("ProjectIdentifier", "Project identifier already exists for this company.");
+            invalidCreateDataResultProblem.AddError("ProjectIdentifier", "Project identifier already exists for this company.");
         }
 
-        if (invalidCreateDataException.Errors.Count > 0)
+        if (invalidCreateDataResultProblem.Errors.Count > 0)
         {
-            return (false, new Result<CreateProjectResponse?>(invalidCreateDataException));
+            return (false, new Result<CreateProjectResponse?>(invalidCreateDataResultProblem));
         }
 
         return (true, null);

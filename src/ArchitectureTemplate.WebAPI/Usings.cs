@@ -6,6 +6,7 @@ global using ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsBy
 global using ArchitectureTemplate.Application.UseCases.Locations.GetScopePackagesByProjectId;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
+global using ArchitectureTemplate.Domain.Common.Result;
 global using ArchitectureTemplate.WebAPI;
 global using ArchitectureTemplate.WebAPI.Endpoints;
 global using FluentValidation;

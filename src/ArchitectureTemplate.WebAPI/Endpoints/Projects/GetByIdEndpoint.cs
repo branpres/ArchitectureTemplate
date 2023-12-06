@@ -26,7 +26,12 @@ public class GetByIdEndpoint : IEndpoint
 
         return result.Match(
             getProjectByIdResponse => Ok(getProjectByIdResponse!),
-            notFoundException => Results.NotFound());
+            resultProblem => resultProblem is NotFoundResultProblem
+                ? Results.NotFound()
+                : Results.BadRequest(
+                    resultProblem.Errors.Count > 0
+                    ? new HttpValidationProblemDetails(resultProblem.Errors)
+                    : new HttpValidationProblemDetails()));
     }
 
     private static IResult Ok(GetProjectByIdResponse createProjectResponse)

@@ -26,6 +26,11 @@ public class DeleteEndpoint : IEndpoint
 
         return result.Match(
             Results.NoContent,
-            notFoundException => Results.NotFound());
+            resultProblem => resultProblem is NotFoundResultProblem
+                ? Results.NotFound()
+                : Results.BadRequest(
+                    resultProblem.Errors.Count > 0
+                    ? new HttpValidationProblemDetails(resultProblem.Errors)
+                    : new HttpValidationProblemDetails()));
     }
 }

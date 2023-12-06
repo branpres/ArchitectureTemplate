@@ -12,7 +12,7 @@ public class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) :
 
         if (project == null)
         {
-            return new Result<GetProjectByIdResponse?>(new NotFoundException());
+            return new Result<GetProjectByIdResponse?>(new NotFoundResultProblem());
         }
 
         return new Result<GetProjectByIdResponse?>(project.MapToGetProjectByIdResponse());
