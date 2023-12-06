@@ -25,7 +25,7 @@ public class GetByProjectIdEndpoint : IEndpoint
         var result = await handler.Handle(id, cancellationToken);
 
         return result.Match(
-            getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse!),
+            getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse!.Map()),
             notFoundException => Results.NotFound());
     }
 }
