@@ -4,13 +4,11 @@ public class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) :
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result<GetProjectByIdResponse?>> Handle(Guid id, CancellationToken cancellationToken)
+    public async Task<Result<GetProjectByIdResponse?>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
         var project = await _templateDbContext.Project
             .AsNoTracking()
-            .Include(x => x.ProjectUsers)
-            .Where(x => x.ProjectId == id && !x.IsDeleted)
-            .SingleOrDefaultAsync(cancellationToken);
+            .GetProjectWithProjectUsers(projectId, cancellationToken);
 
         if (project == null)
         {

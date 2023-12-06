@@ -15,4 +15,11 @@ internal static class Queries
             .AsNoTracking()
             .AnyAsync(x => x.CompanyId == companyId && x.ProjectIdentifier != null && x.ProjectIdentifier.ToUpper() == projectIdentifier.ToUpper(), cancellationToken);
     }
+
+    public async static Task<Project?> GetProjectWithProjectUsers(this IQueryable<Project> project, Guid projectId, CancellationToken cancellationToken)
+    {
+        return await project
+            .Include(x => x.ProjectUsers)
+            .SingleOrDefaultAsync(x => x.ProjectId == projectId && !x.IsDeleted, cancellationToken);
+    }
 }

@@ -4,7 +4,7 @@ internal class SendEmail : IDomainEventOutboxMessageHandler<ProjectUserAddedDoma
 {
     public Task Handle(ProjectUserAddedDomainEvent domainEvent)
     {
-        Console.WriteLine($"Email sent to project admin user. {DateTime.Now}");
+        Console.WriteLine($"Email sent to project user. {DateTime.Now}");
 
         return Task.CompletedTask;
     }

@@ -4,12 +4,9 @@ public class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : 
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result> Handle(Guid id, CancellationToken cancellationToken)
+    public async Task<Result> Handle(Guid projectId, CancellationToken cancellationToken)
     {
-        var project = await _templateDbContext.Project
-            .Include(x => x.ProjectUsers)
-            .Where(x => x.ProjectId == id && !x.IsDeleted)
-            .SingleOrDefaultAsync(cancellationToken);
+        var project = await _templateDbContext.Project.GetProjectWithProjectUsers(projectId, cancellationToken);
 
         if (project == null)
         {

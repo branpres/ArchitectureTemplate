@@ -1,17 +1,21 @@
 ﻿namespace ArchitectureTemplate.Application.DomainEvents;
 
-public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory, ILogger<DomainEventOutboxProcessor> logger) : BackgroundService
+public class DomainEventOutboxProcessor(
+    IServiceScopeFactory serviceScopeFactory,
+    ILogger<DomainEventOutboxProcessor> logger,
+    IConfiguration configuration) : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
     private readonly ILogger<DomainEventOutboxProcessor> _logger = logger;
+    private readonly IConfiguration _configuration = configuration;
 
     private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
 
-    private const int MAX_NUMBER_OF_TRIES = 5;
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while(!stoppingToken.IsCancellationRequested && await _timer.WaitForNextTickAsync(stoppingToken))
+        var maxNumberOfTries = int.Parse(_configuration["DomainEventOutboxProcessor:MaxNumberOfTries"]!);
+
+        while (!stoppingToken.IsCancellationRequested && await _timer.WaitForNextTickAsync(stoppingToken))
         {
             using var scope = _serviceScopeFactory.CreateScope();
 
@@ -20,7 +24,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
             var notProcessedOutboxMessagesQuery = templateDbContext.OutboxMessage
                 .Include(x => x.OutboxMessageHandlerInstances.Where(x => x.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded))
                 .Where(x => (x.OutboxMessageStatus == OutboxMessageStatus.NotProcessed || x.OutboxMessageStatus == OutboxMessageStatus.ProcessingFailed)
-                    && x.NumberOfTries <= MAX_NUMBER_OF_TRIES);
+                    && x.NumberOfTries <= maxNumberOfTries);
             var notProcessedOutboxMessages = await notProcessedOutboxMessagesQuery.ToListAsync(stoppingToken);
 
             await notProcessedOutboxMessagesQuery.ExecuteUpdateAsync(x => x
@@ -49,7 +53,7 @@ public class DomainEventOutboxProcessor(IServiceScopeFactory serviceScopeFactory
                                     var outboxMessageHandlerInstance = outboxMessage.OutboxMessageHandlerInstances.FirstOrDefault(x => x.HandlerName == handlerName);
                                     if (outboxMessageHandlerInstance == null)
                                     {
-                                        outboxMessageHandlerInstance = OutboxMessageHandlerInstance.CreateInstance(outboxMessage, handlerName);
+                                        outboxMessageHandlerInstance = new OutboxMessageHandlerInstance(outboxMessage.OutboxMessageId, handlerName);
                                         outboxMessage.AddOutboxMessageHandlerInstance(outboxMessageHandlerInstance);
                                     }
 
