@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.Locations.ResponseMappers;
+﻿namespace ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.ResponseMappers;
 
 internal static class ScopePackageMapper
 {

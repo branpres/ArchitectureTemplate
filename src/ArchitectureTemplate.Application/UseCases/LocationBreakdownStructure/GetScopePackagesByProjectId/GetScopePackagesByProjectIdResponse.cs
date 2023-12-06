@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.Locations.GetScopePackagesByProjectId;
+﻿namespace ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
 
 public record GetScopePackagesByProjectIdResponse(
     Guid ScopePackageId,

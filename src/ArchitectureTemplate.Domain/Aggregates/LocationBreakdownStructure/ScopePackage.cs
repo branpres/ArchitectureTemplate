@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Aggregates.Locations;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.LocationBreakdownStructure;
 
 public class ScopePackage : IBasicMetadata, IDeleteMetadata
 {

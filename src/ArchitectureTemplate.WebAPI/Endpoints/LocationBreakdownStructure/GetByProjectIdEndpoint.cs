@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.WebAPI.Endpoints.ScopePackages;
+﻿namespace ArchitectureTemplate.WebAPI.Endpoints.LocationBreakdownStructure;
 
 public class GetByProjectIdEndpoint : IEndpoint
 {
