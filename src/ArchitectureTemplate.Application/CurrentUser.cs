@@ -4,16 +4,31 @@
 
 public interface ICurrentUser
 {
-    Guid UserId { get; }
+    public UserResponse User { get; }
 
     bool IsAdmin { get; }
 }
 
-public class CurrentUser : ICurrentUser
+public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
-    public const string CURRENT_USER_ID = "ad19affc-a438-4709-8b0b-1c2c1b2527dc";
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public Guid UserId => new(CURRENT_USER_ID);
+    public UserResponse User => GetAuthenticatedUserFromHttpContext();
 
-    public bool IsAdmin => true;
+    public bool IsAdmin => User.IsAdmin;
+
+    private UserResponse GetAuthenticatedUserFromHttpContext()
+    {
+        if (_httpContextAccessor.HttpContext.Items.TryGetValue("user", out object? user))
+        {
+            if (user != null && user is UserResponse userResponse)
+            {
+                return userResponse;
+            }
+        }
+
+        throw new Exception("Authenticated user not found");
+    }
 }
+
+public record UserResponse(Guid UserId, bool IsAdmin);

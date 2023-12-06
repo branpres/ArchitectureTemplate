@@ -2,7 +2,7 @@
 
 public static class RequestHandlerExtensions
 {
-    public static void AddRequestHandlers(this IServiceCollection services)
+    public static IServiceCollection AddRequestHandlers(this IServiceCollection services)
     {
         typeof(IRequestHandler<,>)
             .Assembly
@@ -27,5 +27,7 @@ public static class RequestHandlerExtensions
                 var serviceType = type.GetInterfaces().First(x => x.GetGenericTypeDefinition() == typeof(IRequestHandler<>));
                 services.AddScoped(serviceType, type);
             });
+
+        return services;
     }
 }

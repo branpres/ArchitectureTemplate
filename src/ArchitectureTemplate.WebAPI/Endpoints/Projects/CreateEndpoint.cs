@@ -8,7 +8,7 @@ public class CreateEndpoint : IEndpoint
             .WithOpenApi(x => new(x)
             {
                 OperationId = "CreateProject",
-                Tags = new List<OpenApiTag> { new OpenApiTag { Name = "Projects" } },
+                Tags = new List<OpenApiTag> { new() { Name = "Projects" } },
                 Description = "Creates a new project. Assigns first project user. Notifies new project user. Creates initial project scope package. Creates project BOM."
             })
             .Produces(StatusCodes.Status200OK)

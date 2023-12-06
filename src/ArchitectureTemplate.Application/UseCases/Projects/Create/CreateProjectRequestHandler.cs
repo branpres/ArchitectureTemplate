@@ -64,9 +64,9 @@ public class CreateProjectRequestHandler(
             project.AddProjectAdminUser(request.AdminUserId.Value);
         }
 
-        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != _currentUser.UserId) || !request.AdminUserId.HasValue)
+        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != _currentUser.User.UserId) || !request.AdminUserId.HasValue)
         {
-            project.AddProjectUser(_currentUser.UserId);
+            project.AddProjectUser(_currentUser.User.UserId);
         }
 
         return project;

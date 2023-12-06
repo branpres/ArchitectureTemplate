@@ -12,6 +12,7 @@ global using ArchitectureTemplate.Domain.Common.DomainEvents;
 global using ArchitectureTemplate.Domain.Common.Interfaces;
 global using ArchitectureTemplate.Domain.Common.Result;
 global using FluentValidation;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;

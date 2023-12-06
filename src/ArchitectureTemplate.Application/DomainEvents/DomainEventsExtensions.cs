@@ -2,7 +2,7 @@
 
 public static class DomainEventsExtensions
 {
-    public static void AddDomainEvents(this IServiceCollection services)
+    public static IServiceCollection AddDomainEvents(this IServiceCollection services)
     {
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 
@@ -29,5 +29,7 @@ public static class DomainEventsExtensions
                 var serviceType = type.GetInterfaces().First(x => x.GetGenericTypeDefinition() == typeof(IDomainEventOutboxMessageHandler<>));
                 services.AddScoped(serviceType, type);
             });
+
+        return services;
     }
 }
