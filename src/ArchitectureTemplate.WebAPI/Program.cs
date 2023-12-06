@@ -44,3 +44,5 @@ using var dbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext
 await dbContext.Database.EnsureCreatedAsync();
 
 app.Run();
+
+public partial class Program { }

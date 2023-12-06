@@ -1,0 +1,13 @@
+global using ArchitectureTemplate.Application.Data;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Data.Sqlite;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
+global using System.Security.Claims;
+global using System.Text.Encodings.Web;
+global using Xunit;
