@@ -2,7 +2,7 @@
 
 public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
-    protected Project() { }
+    private Project() { }
 
     private Project(Guid companyId, string projectName, Guid? projectTypeId, string? projectIdentifier)
     {

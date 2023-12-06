@@ -2,7 +2,7 @@
 
 public class ProjectUser : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
-    protected ProjectUser() { }
+    private ProjectUser() { }
 
     private ProjectUser(Project project, Guid userId, bool isAdmin = false)
     {
