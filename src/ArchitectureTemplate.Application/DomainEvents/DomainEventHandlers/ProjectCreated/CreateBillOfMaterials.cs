@@ -13,5 +13,7 @@ internal class CreateBillOfMaterials(TemplateDbContext templateDbContext) : IDom
         };
 
         await _templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);
+
+        Console.WriteLine("Bill Of Materials Created");
     }
 }

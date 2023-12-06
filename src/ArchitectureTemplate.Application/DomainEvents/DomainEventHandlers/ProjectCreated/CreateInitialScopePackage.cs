@@ -12,5 +12,7 @@ internal class CreateInitialScopePackage(TemplateDbContext templateDbContext) : 
         };
 
         await _templateDbContext.ScopePackage.AddAsync(scopePackage);
+
+        Console.WriteLine("Scope Package Created");
     }
 }
