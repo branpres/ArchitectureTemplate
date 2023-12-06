@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsByProjectId;
+﻿namespace ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
 
 internal class GetBillOfMaterialsByProjectIdRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, GetBillOfMaterialsByProjectIdResponse>
 {

@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsByProjectId;
+﻿namespace ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
 
 public record GetBillOfMaterialsByProjectIdResponse(
     Guid BillOfMaterialsId,

@@ -1,6 +1,6 @@
 ﻿global using ArchitectureTemplate.Application.Data;
 global using ArchitectureTemplate.Application.DomainEvents;
-global using ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsByProjectId;
+global using ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
 global using ArchitectureTemplate.Application.UseCases.BOMs.ResponseMappers;
 global using ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
 global using ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.ResponseMappers;
