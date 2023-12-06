@@ -35,13 +35,21 @@ public class TemplateDbContext(
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = _currentUser.User.UserId;
                     entry.Entity.CreatedOn = DateTime.UtcNow;
+                    if (_currentUser.User != null)
+                    {
+                        entry.Entity.CreatedBy = _currentUser.User.UserId;
+                    }                    
+                    
                     break;
 
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = _currentUser.User.UserId;
                     entry.Entity.UpdatedOn = DateTime.UtcNow;
+                    if (_currentUser.User != null)
+                    {
+                        entry.Entity.UpdatedBy = _currentUser.User.UserId;
+                    }
+                    
                     break;
             }
         }
@@ -53,8 +61,11 @@ public class TemplateDbContext(
                 case EntityState.Modified:
                     if (entry.Entity.IsDeleted)
                     {
-                        entry.Entity.DeletedBy = _currentUser.User.UserId;
                         entry.Entity.DeletedOn = DateTime.UtcNow;
+                        if (_currentUser.User != null)
+                        {
+                            entry.Entity.DeletedBy = _currentUser.User.UserId;
+                        }
                     }
                     break;
             }

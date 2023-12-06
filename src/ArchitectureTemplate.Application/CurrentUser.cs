@@ -1,25 +1,31 @@
 ﻿namespace ArchitectureTemplate.Application;
 
-// simple implementation, not meant to be interpreted as what it would ultimately look like in production
+// simple implementation, not meant to be interpreted as what something like this would ultimately look like in production
 
 public interface ICurrentUser
 {
-    public UserResponse User { get; }
+    public UserResponse? User { get; }
 
-    bool IsAdmin { get; }
+    bool? IsAdmin { get; }
 }
 
 public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public UserResponse User => GetAuthenticatedUserFromHttpContext();
+    public UserResponse? User => GetAuthenticatedUserFromHttpContext();
 
-    public bool IsAdmin => User.IsAdmin;
+    public bool? IsAdmin => User?.IsAdmin;
 
-    private UserResponse GetAuthenticatedUserFromHttpContext()
+    private UserResponse? GetAuthenticatedUserFromHttpContext()
     {
-        if (_httpContextAccessor.HttpContext.Items.TryGetValue("user", out object? user))
+        var httpContext = _httpContextAccessor.HttpContext;
+        if (httpContext == null)
+        {
+            return null;
+        }
+
+        if (httpContext.Items.TryGetValue("user", out object? user))
         {
             if (user != null && user is UserResponse userResponse)
             {
@@ -27,7 +33,7 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUse
             }
         }
 
-        throw new Exception("Authenticated user not found");
+        return null;
     }
 }
 
