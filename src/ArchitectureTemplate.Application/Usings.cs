@@ -1,10 +1,12 @@
 ﻿global using ArchitectureTemplate.Application.Data;
 global using ArchitectureTemplate.Application.DomainEvents;
+global using ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsByProjectId;
+global using ArchitectureTemplate.Application.UseCases.BOMs.ResponseMappers;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
 global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
 global using ArchitectureTemplate.Application.UseCases.Projects.ResponseMappers;
-global using ArchitectureTemplate.Domain.Aggregates.BillOfMaterials;
+global using ArchitectureTemplate.Domain.Aggregates.BOMs;
 global using ArchitectureTemplate.Domain.Aggregates.Locations;
 global using ArchitectureTemplate.Domain.Aggregates.Projects;
 global using ArchitectureTemplate.Domain.Aggregates.Projects.DomainEvents;

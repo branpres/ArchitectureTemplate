@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.ResponseMappers;
 
-public static class ProjectMapper
+internal static class ProjectMapper
 {
     public static CreateProjectResponse MapToCreateProjectResponse(this Project project)
     {

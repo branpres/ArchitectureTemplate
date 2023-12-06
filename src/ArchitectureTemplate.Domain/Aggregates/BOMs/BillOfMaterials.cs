@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Domain.Aggregates.BillOfMaterials;
+﻿namespace ArchitectureTemplate.Domain.Aggregates.BOMs;
 
 public class BillOfMaterials : IBasicMetadata, IDeleteMetadata
 {

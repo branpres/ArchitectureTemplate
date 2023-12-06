@@ -2,6 +2,7 @@
 global using ArchitectureTemplate.Application.Data;
 global using ArchitectureTemplate.Application.DomainEvents;
 global using ArchitectureTemplate.Application.UseCases;
+global using ArchitectureTemplate.Application.UseCases.BOMs.GetBillOfMaterialsByProjectId;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
 global using ArchitectureTemplate.WebAPI;
