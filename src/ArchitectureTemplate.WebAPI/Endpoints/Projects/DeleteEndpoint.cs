@@ -8,6 +8,7 @@ public class DeleteEndpoint : IEndpoint
             .WithOpenApi(x => new(x)
             {
                 OperationId = "DeleteProject",
+                Tags = new List<OpenApiTag> { new OpenApiTag { Name = "Projects" } },
                 Description = "Deletes a project."
             })
             .Produces(StatusCodes.Status204NoContent)

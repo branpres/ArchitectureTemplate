@@ -8,6 +8,7 @@ public class GetByIdEndpoint : IEndpoint
             .WithOpenApi(x => new(x)
             {
                 OperationId = "GetProjectById",
+                Tags = new List<OpenApiTag> { new OpenApiTag { Name = "Projects" } },
                 Description = "Gets a project by id."
             })
             .Produces(StatusCodes.Status200OK)

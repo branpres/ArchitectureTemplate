@@ -8,6 +8,7 @@ public class ListEndpoint : IEndpoint
             .WithOpenApi(x => new(x)
             {
                 OperationId = "ListOutboxMessages",
+                Tags = new List<OpenApiTag> { new OpenApiTag { Name = "Outbox" } },
                 Description = "Lists all outbox messages."
             })
             .Produces(StatusCodes.Status200OK);
