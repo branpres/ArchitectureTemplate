@@ -2,8 +2,6 @@
 global using ArchitectureTemplate.Application.DomainEvents;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
-global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
-global using ArchitectureTemplate.Application.UseCases.Projects.ResponseMappers;
 global using ArchitectureTemplate.Domain.Aggregates.BOMs;
 global using ArchitectureTemplate.Domain.Aggregates.LocationBreakdownStructure;
 global using ArchitectureTemplate.Domain.Aggregates.Projects;

@@ -7,3 +7,16 @@ public record GetProjectByIdResponse : CreateProjectResponse
     {
     }
 }
+
+public static class Mapper
+{
+    public static GetProjectByIdResponse MapToGetProjectByIdResponse(this Project project)
+    {
+        return new GetProjectByIdResponse(
+            project.ProjectId,
+            project.CompanyId,
+            project.ProjectName!,
+            project.ProjectIdentifier,
+            project.MapToCreateProjectUserResponses());
+    }
+}

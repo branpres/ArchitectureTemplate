@@ -15,6 +15,6 @@ internal class GetBillOfMaterialsByProjectIdRequestHandler(TemplateDbContext tem
             return new Result<GetBillOfMaterialsByProjectIdResponse?>(new NotFoundResultProblem());
         }
 
-        return new Result<GetBillOfMaterialsByProjectIdResponse?>(billOfMaterials.MapToResponse());
+        return new Result<GetBillOfMaterialsByProjectIdResponse?>(billOfMaterials.MapToGetBillOfMaterialsByProjectIdResponse());
     }
 }

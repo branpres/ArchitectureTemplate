@@ -7,7 +7,7 @@ public record GetBillOfMaterialsByProjectIdResponse(
 
 internal static class Mapper
 {
-    public static GetBillOfMaterialsByProjectIdResponse MapToResponse(this BillOfMaterials billOfMaterials)
+    public static GetBillOfMaterialsByProjectIdResponse MapToGetBillOfMaterialsByProjectIdResponse(this BillOfMaterials billOfMaterials)
     {
         return new GetBillOfMaterialsByProjectIdResponse(
             billOfMaterials.BillOfMaterialsId,

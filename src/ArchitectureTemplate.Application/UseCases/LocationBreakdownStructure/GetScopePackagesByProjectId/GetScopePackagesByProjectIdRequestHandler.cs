@@ -11,6 +11,6 @@ internal class GetScopePackagesByProjectIdRequestHandler(TemplateDbContext templ
             .Where(x => x.ProjectId == projectId && !x.IsDeleted)
             .ToListAsync(cancellationToken);
 
-        return new Result<List<GetScopePackagesByProjectIdResponse>?>(scopePackages.MapToResponse());
+        return new Result<List<GetScopePackagesByProjectIdResponse>?>(scopePackages.MapToGetScopePackagesByProjectIdResponse());
     }
 }

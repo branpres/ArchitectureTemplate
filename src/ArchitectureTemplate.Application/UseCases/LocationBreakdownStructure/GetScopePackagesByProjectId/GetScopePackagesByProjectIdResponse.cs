@@ -7,7 +7,7 @@ public record GetScopePackagesByProjectIdResponse(
 
 internal static class Mapper
 {
-    public static List<GetScopePackagesByProjectIdResponse> MapToResponse(this List<ScopePackage> scopePackages)
+    public static List<GetScopePackagesByProjectIdResponse> MapToGetScopePackagesByProjectIdResponse(this List<ScopePackage> scopePackages)
     {
         return scopePackages.Select(x => new GetScopePackagesByProjectIdResponse(x.ScopePackageId, x.ProjectId, x.ScopePackageName)).ToList();
     }
