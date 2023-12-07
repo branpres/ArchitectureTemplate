@@ -2,18 +2,27 @@
 
 internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private SqliteConnection? _dbConnection;
+
+    private Respawner? _respawner;
+    
     public HttpClient? HttpClient { get; private set; }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
+        _dbConnection = new("Data Source=IntegrationTestTemplateDB;Mode=Memory;Cache=Shared");
         HttpClient = CreateClient();
-
-        return Task.CompletedTask;
+        await InitializeRespawnerAsync();
     }
 
     Task IAsyncLifetime.DisposeAsync()
     {
         return Task.CompletedTask;
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        await _respawner!.ResetAsync(_dbConnection!);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -29,21 +38,33 @@ internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Prog
             }
             services.AddDbContext<TemplateDbContext>(options =>
             {
-                var connection = new SqliteConnection("Data Source=IntegrationTestTemplateDB;Mode=Memory;Cache=Shared");
-                connection.Open();
-                options.UseSqlite(connection);
+                options.UseSqlite(_dbConnection!);
             });
 
             await InitializeDatabase(services);
         });
     }
 
-    private static async Task InitializeDatabase(IServiceCollection services)
+    private async Task InitializeDatabase(IServiceCollection services)
     {
+        await _dbConnection!.OpenAsync();
+
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
         using var dbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext>();
         await dbContext.Database.EnsureCreatedAsync();
+    }
+
+    private async Task InitializeRespawnerAsync()
+    {
+        _respawner = await Respawner.CreateAsync(_dbConnection!, new RespawnerOptions
+        {
+            // tables in your database that you wish to not have Respawner blow away each time it resets the database between tests
+            TablesToIgnore =
+            [
+                //"__EFMigrationsHistory",                
+            ]
+        });
     }
 }
 

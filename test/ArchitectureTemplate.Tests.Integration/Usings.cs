@@ -8,6 +8,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
+global using Respawn;
 global using System.Security.Claims;
 global using System.Text.Encodings.Web;
 global using Xunit;
