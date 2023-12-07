@@ -34,15 +34,15 @@ public class GetByIdEndpoint : IEndpoint
                     : new HttpValidationProblemDetails()));
     }
 
-    private static IResult Ok(GetProjectByIdResponse createProjectResponse)
+    private static IResult Ok(GetProjectByIdResponse getProjectByIdResponse)
     {
         var links = new List<Link>
         {
-            { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
-            { new Link("BillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
-            { new Link("ScopeByProjectId", $"/scopepackage/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) }
+            { new Link("DeleteProject", $"/project/{getProjectByIdResponse.ProjectId}", HttpMethod.Delete.ToString()) },
+            { new Link("GetBillOfMaterialsByProjectId", $"/bom/{getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new Link("GetScopeByProjectId", $"/scopepackage/{getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) }
         };
 
-        return Results.Ok(createProjectResponse.Map(links));
+        return Results.Ok(getProjectByIdResponse.Map(links));
     }
 }

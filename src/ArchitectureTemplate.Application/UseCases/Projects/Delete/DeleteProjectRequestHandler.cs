@@ -14,6 +14,7 @@ public class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : 
         }
 
         project.SoftDelete();
+        await _templateDbContext.SaveChangesAsync(cancellationToken);
 
         return new Result();
     }

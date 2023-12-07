@@ -2,13 +2,15 @@
 
 public class ScopePackage : IBasicMetadata, IDeleteMetadata
 {
+    public const string DEFAULT_SCOPE_PACKAGE_NAME = "Scope Package 1";
+
     public Guid ScopePackageId { get; set; }
 
     public Guid ProjectId { get; set; }
 
     public Project? Project { get; set; }
 
-    public string ScopePackageName { get; set; } = "Scope Package 1";
+    public string ScopePackageName { get; set; } = DEFAULT_SCOPE_PACKAGE_NAME;
 
     public DateTime CreatedOn { get; set; }
 

@@ -19,7 +19,7 @@ internal static class Queries
     public async static Task<Project?> GetProjectWithProjectUsers(this IQueryable<Project> project, Guid projectId, CancellationToken cancellationToken)
     {
         return await project
-            .Include(x => x.ProjectUsers)
+            .Include(x => x.ProjectUsers.Where(y => !y.IsDeleted))
             .SingleOrDefaultAsync(x => x.ProjectId == projectId && !x.IsDeleted, cancellationToken);
     }
 }

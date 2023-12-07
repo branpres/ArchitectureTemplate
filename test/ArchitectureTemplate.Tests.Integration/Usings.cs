@@ -1,7 +1,13 @@
+global using ArchitectureTemplate.Application.Domain.Aggregates.LocationBreakdownStructure;
 global using ArchitectureTemplate.Application.Infrastructure;
+global using ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
+global using ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
+global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
+global using ArchitectureTemplate.WebAPI.Endpoints;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.AspNetCore.TestHost;
 global using Microsoft.EntityFrameworkCore;
