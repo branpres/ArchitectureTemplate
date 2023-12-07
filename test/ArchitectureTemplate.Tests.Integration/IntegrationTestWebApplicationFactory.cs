@@ -1,8 +1,10 @@
 ﻿namespace ArchitectureTemplate.Tests.Integration;
 
-internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private SqliteConnection? _dbConnection;
+    private readonly MySqlContainer _mySqlContainer = new MySqlBuilder().Build();
+
+    private DbConnection? _dbConnection;
 
     private Respawner? _respawner;
     
@@ -10,14 +12,15 @@ internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Prog
 
     public async Task InitializeAsync()
     {
-        _dbConnection = new("Data Source=IntegrationTestTemplateDB;Mode=Memory;Cache=Shared");
+        await _mySqlContainer.StartAsync();
+        _dbConnection = new MySqlConnection(_mySqlContainer.GetConnectionString());
         HttpClient = CreateClient();
         await InitializeRespawnerAsync();
     }
 
-    Task IAsyncLifetime.DisposeAsync()
+    async Task IAsyncLifetime.DisposeAsync()
     {
-        return Task.CompletedTask;
+        await _mySqlContainer.StopAsync();
     }
 
     public async Task ResetDatabaseAsync()
@@ -27,7 +30,7 @@ internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Prog
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureTestServices(async services =>
+        builder.ConfigureTestServices(services =>
         {
             services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, IntegrationTestAuthHandler>("Test", options => { });
 
@@ -36,29 +39,25 @@ internal class IntegrationTestWebApplicationFactory : WebApplicationFactory<Prog
             {
                 services.Remove(serviceDescriptor);
             }
-            services.AddDbContext<TemplateDbContext>(options =>
-            {
-                options.UseSqlite(_dbConnection!);
-            });
-
-            await InitializeDatabase(services);
+            services.AddDbContext<TemplateDbContext>(
+                dbContextOptions =>
+                {
+                    dbContextOptions
+                        .UseMySql(
+                            _mySqlContainer.GetConnectionString(),
+                            ServerVersion.AutoDetect(_mySqlContainer.GetConnectionString()));
+                }
+            );
         });
-    }
-
-    private async Task InitializeDatabase(IServiceCollection services)
-    {
-        await _dbConnection!.OpenAsync();
-
-        var serviceProvider = services.BuildServiceProvider();
-        using var scope = serviceProvider.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext>();
-        await dbContext.Database.EnsureCreatedAsync();
     }
 
     private async Task InitializeRespawnerAsync()
     {
+        await _dbConnection!.OpenAsync();
         _respawner = await Respawner.CreateAsync(_dbConnection!, new RespawnerOptions
         {
+            DbAdapter = DbAdapter.MySql,
+
             // tables in your database that you wish to not have Respawner blow away each time it resets the database between tests
             TablesToIgnore =
             [
