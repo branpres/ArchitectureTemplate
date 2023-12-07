@@ -1,4 +1,5 @@
 ﻿global using ArchitectureTemplate.Application;
+global using ArchitectureTemplate.Application.Domain.Results;
 global using ArchitectureTemplate.Application.DomainEvents;
 global using ArchitectureTemplate.Application.Infrastructure;
 global using ArchitectureTemplate.Application.UseCases;
@@ -6,7 +7,6 @@ global using ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
 global using ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.GetById;
-global using ArchitectureTemplate.Domain.Common.Result;
 global using ArchitectureTemplate.WebAPI;
 global using ArchitectureTemplate.WebAPI.Endpoints;
 global using FluentValidation;
