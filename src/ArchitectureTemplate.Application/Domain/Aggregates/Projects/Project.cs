@@ -69,15 +69,13 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 
     public void SoftDelete()
     {
+        IsDeleted = true;
+
         if (ProjectUsers != null)
         {
-            foreach (var projectUser in ProjectUsers)
-            {
-                projectUser.SoftDelete();
-            }
+            ProjectUsers.ForEach(x => x.SoftDelete());
         }
 
-        SoftDelete();
         RegisterDomainEvent(new ProjectDeletedDomainEvent(this));
     }
 }

@@ -13,6 +13,8 @@ public class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : 
             return new Result(new NotFoundResultProblem());
         }
 
+        project.SoftDelete();
+
         return new Result();
     }
 }
