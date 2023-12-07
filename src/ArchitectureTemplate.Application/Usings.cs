@@ -1,5 +1,5 @@
-﻿global using ArchitectureTemplate.Application.Data;
-global using ArchitectureTemplate.Application.DomainEvents;
+﻿global using ArchitectureTemplate.Application.DomainEvents;
+global using ArchitectureTemplate.Application.Infrastructure;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
 global using ArchitectureTemplate.Domain.Aggregates.BOMs;

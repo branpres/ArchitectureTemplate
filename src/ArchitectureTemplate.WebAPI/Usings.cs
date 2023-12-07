@@ -1,6 +1,6 @@
 ﻿global using ArchitectureTemplate.Application;
-global using ArchitectureTemplate.Application.Data;
 global using ArchitectureTemplate.Application.DomainEvents;
+global using ArchitectureTemplate.Application.Infrastructure;
 global using ArchitectureTemplate.Application.UseCases;
 global using ArchitectureTemplate.Application.UseCases.BOMs.GetByProjectId;
 global using ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;

@@ -1,4 +1,4 @@
-global using ArchitectureTemplate.Application.Data;
+global using ArchitectureTemplate.Application.Infrastructure;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc.Testing;

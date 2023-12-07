@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.Data.EntityTypeConfigurations;
+﻿namespace ArchitectureTemplate.Application.Infrastructure.EntityTypeConfigurations;
 
 internal class ProjectUserEntityTypeConfiguration : IEntityTypeConfiguration<ProjectUser>
 {

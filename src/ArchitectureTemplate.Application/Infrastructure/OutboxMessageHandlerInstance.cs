@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.Data;
+﻿namespace ArchitectureTemplate.Application.Infrastructure;
 
 public class OutboxMessageHandlerInstance(Guid outboxMessageId, string handlerName): IBasicMetadata
 {
