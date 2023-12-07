@@ -2,6 +2,7 @@
 
 public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    // Using MySQL for integration tests as Respawn does not work with Sqlite.
     private readonly MySqlContainer _mySqlContainer = new MySqlBuilder().Build();
 
     private DbConnection? _dbConnection;
