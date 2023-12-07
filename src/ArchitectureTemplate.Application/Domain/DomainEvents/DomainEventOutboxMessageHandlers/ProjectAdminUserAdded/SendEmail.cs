@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.DomainEvents.DomainEventOutboxMessageHandlers.ProjectAdminUserAdded;
+﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents.DomainEventOutboxMessageHandlers.ProjectAdminUserAdded;
 
 internal class SendEmail : IDomainEventOutboxMessageHandler<ProjectAdminUserAddedDomainEvent>
 {

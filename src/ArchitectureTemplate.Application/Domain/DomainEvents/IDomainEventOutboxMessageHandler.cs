@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.DomainEvents;
+﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents;
 
 public interface IDomainEventOutboxMessageHandler<T> where T : IDomainEvent
 {

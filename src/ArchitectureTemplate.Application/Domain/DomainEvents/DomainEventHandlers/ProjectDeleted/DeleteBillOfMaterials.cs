@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.DomainEvents.DomainEventHandlers.ProjectDeleted;
+﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents.DomainEventHandlers.ProjectDeleted;
 
 internal class DeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeletedDomainEvent>
 {

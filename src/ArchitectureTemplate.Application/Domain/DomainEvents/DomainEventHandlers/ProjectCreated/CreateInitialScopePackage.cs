@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.Application.DomainEvents.DomainEventHandlers.ProjectCreated;
+﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents.DomainEventHandlers.ProjectCreated;
 
 internal class CreateInitialScopePackage(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreatedDomainEvent>
 {

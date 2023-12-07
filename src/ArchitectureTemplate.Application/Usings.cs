@@ -5,7 +5,6 @@ global using ArchitectureTemplate.Application.Domain.Aggregates.Projects;
 global using ArchitectureTemplate.Application.Domain.Aggregates.Projects.DomainEvents;
 global using ArchitectureTemplate.Application.Domain.DomainEvents;
 global using ArchitectureTemplate.Application.Domain.Results;
-global using ArchitectureTemplate.Application.DomainEvents;
 global using ArchitectureTemplate.Application.Infrastructure;
 global using ArchitectureTemplate.Application.UseCases.Projects.Create;
 global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
