@@ -11,7 +11,7 @@ Long story short, this template is a demonstration of my latest personal opinion
 - Minimal API
 - SQLite
 - IExceptionHandler
-- Swagger (not much, still learning how to use it)
+- Swagger/Open API (still learning how to use it to document the API)
 - FluentValidation
 - EF Core
 - Testcontainers (for spinning up a docker container for integration testing against a real MySQL database)
