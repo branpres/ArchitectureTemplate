@@ -9,7 +9,7 @@ public class DomainEventOutboxProcessor(
     private readonly ILogger<DomainEventOutboxProcessor> _logger = logger;
     private readonly IConfiguration _configuration = configuration;
 
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(10));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
