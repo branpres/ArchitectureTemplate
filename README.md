@@ -14,9 +14,11 @@ Long story short, this template is a demonstration of my latest personal opinion
 - Swagger (not much, still learning how to use it)
 - FluentValidation
 - EF Core
+- Testcontainers (for spinning up a docker container for integration testing against a real MySQL database)
 - HATEOAS (not happy with how I'm currently providing links in responses, but hopefully can eventually find a decent way of doing this generically)
 - CQRS (ish)
 - DDD (still learning how to apply some of the concepts - perhaps DDD lite at best)
 - Domain Events
 - Outbox pattern (maybe a bit of a crude implementation of it)
 - Result pattern (all responses return whether it was successful or whether it failed, eliminates throwing exceptions as a way of handling errors in normal control flow)
+- Integration tests
