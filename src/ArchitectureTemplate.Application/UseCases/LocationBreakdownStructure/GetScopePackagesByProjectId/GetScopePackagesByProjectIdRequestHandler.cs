@@ -4,13 +4,13 @@ internal class GetScopePackagesByProjectIdRequestHandler(TemplateDbContext templ
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result<List<GetScopePackagesByProjectIdResponse>?>> Handle(Guid projectId, CancellationToken cancellationToken)
+    public async Task<Result<List<GetScopePackagesByProjectIdResponse>>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
         var scopePackages = await _templateDbContext.ScopePackage
             .AsNoTracking()
             .Where(x => x.ProjectId == projectId && !x.IsDeleted)
             .ToListAsync(cancellationToken);
 
-        return new Result<List<GetScopePackagesByProjectIdResponse>?>(scopePackages.MapToGetScopePackagesByProjectIdResponse());
+        return new Result<List<GetScopePackagesByProjectIdResponse>>(scopePackages.MapToGetScopePackagesByProjectIdResponse());
     }
 }

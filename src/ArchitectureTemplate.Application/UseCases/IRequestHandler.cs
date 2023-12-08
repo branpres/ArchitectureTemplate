@@ -2,7 +2,7 @@
 
 public interface IRequestHandler<TRequest, TResponse>
 {
-    Task<Result<TResponse?>> Handle(TRequest request, CancellationToken cancellationToken);
+    Task<Result<TResponse>> Handle(TRequest request, CancellationToken cancellationToken);
 }
 
 public interface IRequestHandler<TRequest>

@@ -10,7 +10,7 @@ public class CreateProjectRequestHandler(
     private readonly ICurrentUser _currentUser = currentUser;
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    async Task<Result<CreateProjectResponse?>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+    async Task<Result<CreateProjectResponse>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = await Validate(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -23,16 +23,16 @@ public class CreateProjectRequestHandler(
         await _templateDbContext.Project.AddAsync(project, cancellationToken);
         await _templateDbContext.SaveChangesAsync(cancellationToken);
 
-        var result = new Result<CreateProjectResponse?>(project.MapToCreateProjectResponse());
+        var result = new Result<CreateProjectResponse>(project.MapToCreateProjectResponse());
         return result;
     }
 
-    private async Task<(bool IsValid, Result<CreateProjectResponse?>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
+    private async Task<(bool IsValid, Result<CreateProjectResponse>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = _validator.Validate(request);
         if (!validationResult.IsValid)
         {
-            return (false, new Result<CreateProjectResponse?>(new ResultProblem(validationResult.Errors)));
+            return (false, new Result<CreateProjectResponse>(new ResultProblem(validationResult.Errors)));
         }
 
         var invalidCreateDataResultProblem = new ResultProblem();
@@ -49,7 +49,7 @@ public class CreateProjectRequestHandler(
 
         if (invalidCreateDataResultProblem.Errors.Count > 0)
         {
-            return (false, new Result<CreateProjectResponse?>(invalidCreateDataResultProblem));
+            return (false, new Result<CreateProjectResponse>(invalidCreateDataResultProblem));
         }
 
         return (true, null);

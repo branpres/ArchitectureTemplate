@@ -4,7 +4,7 @@ public class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) :
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result<GetProjectByIdResponse?>> Handle(Guid projectId, CancellationToken cancellationToken)
+    public async Task<Result<GetProjectByIdResponse>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
         var project = await _templateDbContext.Project
             .AsNoTracking()
@@ -12,9 +12,9 @@ public class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) :
 
         if (project == null)
         {
-            return new Result<GetProjectByIdResponse?>(new NotFoundResultProblem());
+            return new Result<GetProjectByIdResponse>(new NotFoundResultProblem());
         }
 
-        return new Result<GetProjectByIdResponse?>(project.MapToGetProjectByIdResponse());
+        return new Result<GetProjectByIdResponse>(project.MapToGetProjectByIdResponse());
     }
 }

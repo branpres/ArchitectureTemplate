@@ -4,7 +4,7 @@ internal class GetBillOfMaterialsByProjectIdRequestHandler(TemplateDbContext tem
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result<GetBillOfMaterialsByProjectIdResponse?>> Handle(Guid projectId, CancellationToken cancellationToken)
+    public async Task<Result<GetBillOfMaterialsByProjectIdResponse>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
         var billOfMaterials = await _templateDbContext.BillOfMaterials
             .AsNoTracking()
@@ -12,9 +12,9 @@ internal class GetBillOfMaterialsByProjectIdRequestHandler(TemplateDbContext tem
 
         if (billOfMaterials == null)
         {
-            return new Result<GetBillOfMaterialsByProjectIdResponse?>(new NotFoundResultProblem());
+            return new Result<GetBillOfMaterialsByProjectIdResponse>(new NotFoundResultProblem());
         }
 
-        return new Result<GetBillOfMaterialsByProjectIdResponse?>(billOfMaterials.MapToGetBillOfMaterialsByProjectIdResponse());
+        return new Result<GetBillOfMaterialsByProjectIdResponse>(billOfMaterials.MapToGetBillOfMaterialsByProjectIdResponse());
     }
 }
