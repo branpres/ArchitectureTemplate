@@ -6,7 +6,7 @@ I like various aspects of clean/onion/hexagonal architecture, vertical slice arc
 
 Long story short, this template is a demonstration of my latest personal opinions on how to structure a .NET Web API solution, a structure that is simple (IMO anyway, debatable), pragmatic, and reveals more easily the intent of what the software actually does. It's definitely not exhaustive by any stretch, but hopefully a decent enough starting point.
 
-# Some tech/styles/patterns used
+### Some tech/styles/patterns used
 
 - Minimal API
 - SQLite
