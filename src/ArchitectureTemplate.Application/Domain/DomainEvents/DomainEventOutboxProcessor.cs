@@ -22,7 +22,7 @@ public class DomainEventOutboxProcessor(
             var templateDbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext>();
 
             var notProcessedOutboxMessagesQuery = templateDbContext.OutboxMessage
-                .Include(x => x.OutboxMessageHandlerInstances.Where(x => x.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded))
+                .Include(x => x.OutboxMessageHandlerInstances)
                 .Where(x => (x.OutboxMessageStatus == OutboxMessageStatus.NotProcessed || x.OutboxMessageStatus == OutboxMessageStatus.ProcessingFailed)
                     && x.NumberOfTries <= maxNumberOfTries);
             var notProcessedOutboxMessages = await notProcessedOutboxMessagesQuery.ToListAsync(stoppingToken);
@@ -59,8 +59,11 @@ public class DomainEventOutboxProcessor(
 
                                     try
                                     {
-                                        await handleMethod?.Invoke((dynamic)domainEventOutboxMessageHandler, new object[] { domainEvent });
-                                        outboxMessageHandlerInstance.MarkSucceeded();
+                                        if (outboxMessageHandlerInstance.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded)
+                                        {
+                                            await handleMethod?.Invoke((dynamic)domainEventOutboxMessageHandler, new object[] { domainEvent });
+                                            outboxMessageHandlerInstance.MarkSucceeded();
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
