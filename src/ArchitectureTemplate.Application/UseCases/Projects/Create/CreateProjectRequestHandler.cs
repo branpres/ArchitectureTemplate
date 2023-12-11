@@ -10,7 +10,7 @@ public class CreateProjectRequestHandler(
     private readonly ICurrentUser _currentUser = currentUser;
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    async Task<Result<CreateProjectResponse>> IRequestHandler<CreateProjectRequest, CreateProjectResponse>.Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CreateProjectResponse>> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = await Validate(request, cancellationToken);
         if (!validationResult.IsValid)
