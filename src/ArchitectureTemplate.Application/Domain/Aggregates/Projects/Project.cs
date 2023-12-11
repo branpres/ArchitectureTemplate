@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.Aggregates.Projects;
 
-public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
+internal class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
     private Project() { }
 

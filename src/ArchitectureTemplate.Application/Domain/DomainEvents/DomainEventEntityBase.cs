@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents;
 
-public abstract class DomainEventEntityBase
+internal abstract class DomainEventEntityBase
 {
     [NotMapped]
     public List<IDomainEvent> DomainEvents { get; private set; } = [];

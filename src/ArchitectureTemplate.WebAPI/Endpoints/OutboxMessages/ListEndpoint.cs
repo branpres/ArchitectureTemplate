@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Endpoints.OutboxMessages;
 
-public class ListEndpoint : IEndpoint
+internal class ListEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {

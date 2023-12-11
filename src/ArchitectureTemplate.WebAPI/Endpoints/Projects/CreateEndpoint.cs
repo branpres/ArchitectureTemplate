@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Endpoints.Projects;
 
-public class CreateEndpoint : IEndpoint
+internal class CreateEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {

@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.Create;
 
-public class CreateProjectRequestHandler(
+internal class CreateProjectRequestHandler(
     IValidator<CreateProjectRequest> validator,
     ICurrentUser currentUser,
     TemplateDbContext templateDbContext)

@@ -7,7 +7,7 @@ public record GetProjectByIdResponse(
     string? ProjectIdentifier,
     List<CreateProjectUserResponse>? ProjectUsers);
 
-public static class Mapper
+internal static class Mapper
 {
     public static GetProjectByIdResponse MapToGetProjectByIdResponse(this Project project)
     {

@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Endpoints.Projects;
 
-public class DeleteEndpoint : IEndpoint
+internal class DeleteEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {

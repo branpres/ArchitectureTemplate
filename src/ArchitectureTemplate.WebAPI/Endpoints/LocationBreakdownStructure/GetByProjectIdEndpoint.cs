@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Endpoints.LocationBreakdownStructure;
 
-public class GetByProjectIdEndpoint : IEndpoint
+internal class GetByProjectIdEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {

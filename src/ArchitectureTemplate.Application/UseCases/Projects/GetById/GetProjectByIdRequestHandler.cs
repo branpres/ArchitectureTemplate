@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.GetById;
 
-public class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, GetProjectByIdResponse>
+internal class GetProjectByIdRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, GetProjectByIdResponse>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 

@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.Aggregates.BOM;
 
-public class BillOfMaterials : IBasicMetadata, IDeleteMetadata
+internal class BillOfMaterials : IBasicMetadata, IDeleteMetadata
 {
     public Guid BillOfMaterialsId { get; set; }
 

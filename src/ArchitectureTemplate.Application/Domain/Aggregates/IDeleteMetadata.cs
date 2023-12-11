@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.Aggregates;
 
-public interface IDeleteMetadata
+internal interface IDeleteMetadata
 {
     public bool IsDeleted { get; set; }
 

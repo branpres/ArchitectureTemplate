@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.Aggregates;
 
-public interface IBasicMetadata
+internal interface IBasicMetadata
 {
     public DateTime CreatedOn { get; set; }
 

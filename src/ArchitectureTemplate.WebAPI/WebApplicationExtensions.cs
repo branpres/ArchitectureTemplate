@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI;
 
-public static class WebApplicationExtensions
+internal static class WebApplicationExtensions
 {
     public static WebApplication MapEndpoints(this WebApplication app)
     {

@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.Delete;
 
-public class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid>
+internal class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 

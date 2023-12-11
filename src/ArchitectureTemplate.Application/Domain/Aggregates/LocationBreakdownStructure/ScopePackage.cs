@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.Aggregates.LocationBreakdownStructure;
 
-public class ScopePackage : IBasicMetadata, IDeleteMetadata
+internal class ScopePackage : IBasicMetadata, IDeleteMetadata
 {
     public const string DEFAULT_SCOPE_PACKAGE_NAME = "Scope Package 1";
 

@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI;
 
-public class CurrentUserMiddleware(RequestDelegate next, ILogger<CurrentUserMiddleware> logger)
+internal class CurrentUserMiddleware(RequestDelegate next, ILogger<CurrentUserMiddleware> logger)
 {
     private readonly ILogger<CurrentUserMiddleware> _logger = logger;
     private readonly RequestDelegate _next = next;
