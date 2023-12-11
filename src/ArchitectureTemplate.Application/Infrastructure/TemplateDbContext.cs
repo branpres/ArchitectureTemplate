@@ -3,11 +3,11 @@
 public class TemplateDbContext(
     DbContextOptions options,
     ICurrentUser currentUser,
-    IDomainEventDispatcher domainEventDispatcher) : DbContext(options)
+    DomainEventDispatcher domainEventDispatcher) : DbContext(options)
 {
     private readonly ICurrentUser _currentUser = currentUser;
 
-    private readonly IDomainEventDispatcher _domainEventDispatcher = domainEventDispatcher;
+    private readonly DomainEventDispatcher _domainEventDispatcher = domainEventDispatcher;
 
     internal DbSet<Project> Project { get; set; }
 

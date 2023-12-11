@@ -1,11 +1,6 @@
 ﻿namespace ArchitectureTemplate.Application.Domain.DomainEvents;
 
-public interface IDomainEventDispatcher
-{
-    Task DispatchDomainEvents(TemplateDbContext templateDbContext);
-}
-
-public class DomainEventDispatcher(IServiceProvider serviceProvider) : IDomainEventDispatcher
+public class DomainEventDispatcher(IServiceProvider serviceProvider)
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
