@@ -1,10 +1,12 @@
-﻿namespace ArchitectureTemplate.WebAPI.Endpoints.Projects;
+﻿using ArchitectureTemplate.Application.UseCases.Projects.Delete;
+
+namespace ArchitectureTemplate.WebAPI.Endpoints.Projects;
 
 internal class DeleteEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
-        builder.MapDelete("/project/{id}", Delete)
+        builder.MapDelete("/project/{projectId}", Delete)
             .WithOpenApi(x => new(x)
             {
                 OperationId = "DeleteProject",
@@ -18,11 +20,11 @@ internal class DeleteEndpoint : IEndpoint
     }
 
     private async Task<IResult> Delete(
-        Guid id,
-        IRequestHandler<Guid> handler,
+        [AsParameters] DeleteProjectRequest request,
+        IRequestHandler<DeleteProjectRequest> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(id, cancellationToken);
+        var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
             Results.NoContent,

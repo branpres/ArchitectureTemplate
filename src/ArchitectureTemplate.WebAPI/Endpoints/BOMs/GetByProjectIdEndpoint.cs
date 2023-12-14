@@ -4,7 +4,7 @@ internal class GetByProjectIdEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/bom/{id}", Get)
+        builder.MapGet("/bom/{projectId}", Get)
             .WithOpenApi(x => new(x)
             {
                 OperationId = "GetBillOfMaterialsByProjectId",
@@ -18,11 +18,11 @@ internal class GetByProjectIdEndpoint : IEndpoint
     }
 
     private async Task<IResult> Get(
-        Guid id,
-        IRequestHandler<Guid, GetBillOfMaterialsByProjectIdResponse> handler,
+        [AsParameters] GetBillOfMaterialsByProjectIdRequest request,
+        IRequestHandler<GetBillOfMaterialsByProjectIdRequest, GetBillOfMaterialsByProjectIdResponse> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(id, cancellationToken);
+        var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
             getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse!.Map()),

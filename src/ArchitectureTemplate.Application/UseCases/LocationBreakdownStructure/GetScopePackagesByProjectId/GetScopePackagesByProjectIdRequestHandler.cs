@@ -1,14 +1,14 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
 
-internal class GetScopePackagesByProjectIdRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, List<GetScopePackagesByProjectIdResponse>>
+internal class GetScopePackagesByProjectIdRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<GetScopePackageByProjectIdRequest, List<GetScopePackagesByProjectIdResponse>>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result<List<GetScopePackagesByProjectIdResponse>>> Handle(Guid projectId, CancellationToken cancellationToken)
+    public async Task<Result<List<GetScopePackagesByProjectIdResponse>>> Handle(GetScopePackageByProjectIdRequest request, CancellationToken cancellationToken)
     {
         var scopePackages = await _templateDbContext.ScopePackage
             .AsNoTracking()
-            .Where(x => x.ProjectId == projectId && !x.IsDeleted)
+            .Where(x => x.ProjectId == request.ProjectId && !x.IsDeleted)
             .ToListAsync(cancellationToken);
 
         return new Result<List<GetScopePackagesByProjectIdResponse>>(scopePackages.MapToGetScopePackagesByProjectIdResponse());

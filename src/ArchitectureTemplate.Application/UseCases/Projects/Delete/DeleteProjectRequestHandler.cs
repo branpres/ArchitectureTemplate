@@ -1,12 +1,12 @@
 ﻿namespace ArchitectureTemplate.Application.UseCases.Projects.Delete;
 
-internal class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid>
+internal class DeleteProjectRequestHandler(TemplateDbContext templateDbContext) : IRequestHandler<DeleteProjectRequest>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task<Result> Handle(Guid projectId, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteProjectRequest request, CancellationToken cancellationToken)
     {
-        var project = await _templateDbContext.Project.GetProjectWithProjectUsers(projectId, cancellationToken);
+        var project = await _templateDbContext.Project.GetProjectWithProjectUsers(request.ProjectId, cancellationToken);
 
         if (project == null)
         {

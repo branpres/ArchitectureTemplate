@@ -4,7 +4,7 @@ internal class GetByProjectIdEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/scopepackage/{id}", Get)
+        builder.MapGet("/scopepackage/{projectId}", Get)
             .WithOpenApi(x => new(x)
             {
                 OperationId = "GetScopePackageByProjectId",
@@ -17,11 +17,11 @@ internal class GetByProjectIdEndpoint : IEndpoint
     }
 
     private async Task<IResult> Get(
-        Guid id,
-        IRequestHandler<Guid, List<GetScopePackagesByProjectIdResponse>> handler,
+        [AsParameters] GetScopePackageByProjectIdRequest request,
+        IRequestHandler<GetScopePackageByProjectIdRequest, List<GetScopePackagesByProjectIdResponse>> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(id, cancellationToken);
+        var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
             getScopePackageByProjectIdResponse => Results.Ok(getScopePackageByProjectIdResponse.Map()),
