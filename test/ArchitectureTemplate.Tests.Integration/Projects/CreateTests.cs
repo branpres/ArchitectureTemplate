@@ -14,34 +14,34 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     public async Task ShouldCreateProjectAndGetItBack()
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
-        var response = await CreateProjectAndGetItBack(createProjectRequest);
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<GetProjectByIdResponse>>();
+        var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
+        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.True(endpointResponse!.Response.CompanyId == createProjectRequest.CompanyId
-            && endpointResponse.Response.ProjectName == createProjectRequest.ProjectName
-            && endpointResponse.Response.ProjectIdentifier == createProjectRequest.ProjectIdentifier);
+        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        Assert.True(response!.CompanyId == createProjectRequest.CompanyId
+            && response.ProjectName == createProjectRequest.ProjectName
+            && response.ProjectIdentifier == createProjectRequest.ProjectIdentifier);
     }
 
     [Fact]
     public async Task ShouldCreateProjectWithNoAdminUser()
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
-        var response = await CreateProjectAndGetItBack(createProjectRequest);
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<GetProjectByIdResponse>>();
+        var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
+        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
 
-        Assert.False(endpointResponse!.Response.ProjectUsers!.Single().IsAdmin);
+        Assert.False(response!.ProjectUsers!.Single().IsAdmin);
     }
 
     [Fact]
     public async Task ShouldCreateProjectWithAdminUser()
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid(), Guid.NewGuid());
-        var response = await CreateProjectAndGetItBack(createProjectRequest);
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<GetProjectByIdResponse>>();
+        var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
+        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
 
-        Assert.Equal(2, endpointResponse!.Response.ProjectUsers!.Count);
-        Assert.Single(endpointResponse.Response.ProjectUsers.Where(x => x.IsAdmin));
+        Assert.Equal(2, response!.ProjectUsers!.Count);
+        Assert.Single(response.ProjectUsers.Where(x => x.IsAdmin));
     }
 
     [Theory]
@@ -97,29 +97,29 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     public async Task ShouldCreateBillOfMaterialsAfterCreatingProject()
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
-        var response = await CreateProjectAndGetItBack(createProjectRequest);
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<GetProjectByIdResponse>>();
+        var createProjectResponse = await CreateProjectAndGetItBack(createProjectRequest);
+        var response = await createProjectResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
 
-        var getBillOfMaterialsLink = endpointResponse!.Links!.First(x => x.Name == "GetBillOfMaterialsByProjectId").Href;
+        var getBillOfMaterialsLink = response!.Links!.First(x => x.Name == "GetBillOfMaterialsByProjectId").Href;
         var billOfMaterialsResponse = await _httpClient.GetAsync(getBillOfMaterialsLink);
-        var endpointResponseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<EndpointResponse<GetBillOfMaterialsByProjectIdResponse>>();
+        var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetBillOfMaterialsByProjectIdResponse>();
 
-        Assert.True(endpointResponseForBom!.Response.ProjectId == endpointResponse!.Response.ProjectId
-            && endpointResponseForBom.Response.BillOfMaterialsName == endpointResponse.Response.ProjectName);
+        Assert.True(responseForBom!.ProjectId == response!.ProjectId
+            && responseForBom.BillOfMaterialsName == response.ProjectName);
     }
 
     [Fact]
     public async Task ShouldCreateScopePackageAfterCreatingProject()
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
-        var response = await CreateProjectAndGetItBack(createProjectRequest);
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<GetProjectByIdResponse>>();
+        var createProjectResponse = await CreateProjectAndGetItBack(createProjectRequest);
+        var response = await createProjectResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
 
-        var getScopePackageLink = endpointResponse!.Links!.First(x => x.Name == "GetScopeByProjectId").Href;
+        var getScopePackageLink = response!.Links!.First(x => x.Name == "GetScopePackagesByProjectId").Href;
         var scopePackageResponse = await _httpClient.GetAsync(getScopePackageLink);
-        var endpointResponseForScopePackage = await scopePackageResponse.Content.ReadFromJsonAsync<EndpointResponse<List<GetScopePackagesByProjectIdResponse>>>();
+        var responseForScopePackage = await scopePackageResponse.Content.ReadFromJsonAsync<List<GetScopePackagesByProjectIdResponse>>();
 
-        Assert.True(endpointResponseForScopePackage!.Response.Single().ProjectId == endpointResponse!.Response.ProjectId
-            && endpointResponseForScopePackage.Response.Single().ScopePackageName == ScopePackage.DEFAULT_SCOPE_PACKAGE_NAME);
+        Assert.True(responseForScopePackage!.Single().ProjectId == response!.ProjectId
+            && responseForScopePackage!.Single().ScopePackageName == ScopePackage.DEFAULT_SCOPE_PACKAGE_NAME);
     }
 }

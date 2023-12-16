@@ -5,7 +5,7 @@ public class DeleteTests(IntegrationTestWebApplicationFactory webApplicationFact
     [Fact]
     public async Task ShouldDeleteProject()
     {
-        var endpointResponse = await CreateProjectAndGetEndpointResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
+        var endpointResponse = await CreateProjectAndGetResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
         var deleteResponse = await _httpClient.DeleteAsync(endpointResponse!.Links!.First(x => x.Name == "DeleteProject").Href);
 
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse?.StatusCode);
@@ -18,7 +18,7 @@ public class DeleteTests(IntegrationTestWebApplicationFactory webApplicationFact
     [Fact]
     public async Task ShouldDeleteProjectAndBillOfMaterials()
     {
-        var endpointResponse = await CreateProjectAndGetEndpointResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
+        var endpointResponse = await CreateProjectAndGetResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
         var deleteResponse = await _httpClient.DeleteAsync(endpointResponse!.Links!.First(x => x.Name == "DeleteProject").Href);
 
         // should not be able to retrieve bill of materials as deleting the project also deletes it
@@ -29,14 +29,14 @@ public class DeleteTests(IntegrationTestWebApplicationFactory webApplicationFact
     [Fact]
     public async Task ShouldDeleteProjectAndScopePackage()
     {
-        var endpointResponse = await CreateProjectAndGetEndpointResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
-        var deleteResponse = await _httpClient.DeleteAsync(endpointResponse!.Links!.First(x => x.Name == "DeleteProject").Href);
+        var createProjectResponse = await CreateProjectAndGetResponse(new CreateProjectRequest(Guid.NewGuid(), "Test"));
+        var deleteResponse = await _httpClient.DeleteAsync(createProjectResponse!.Links!.First(x => x.Name == "DeleteProject").Href);
 
         // should retrieve no scope packages as deleting the project also deletes them all
-        var getResponse = await _httpClient.GetAsync(endpointResponse!.Links!.First(x => x.Name == "GetScopeByProjectId").Href);
-        var endpointResponseForScopePackage = await getResponse.Content.ReadFromJsonAsync<EndpointResponse<List<GetScopePackagesByProjectIdResponse>>>();
+        var getResponse = await _httpClient.GetAsync(createProjectResponse!.Links!.First(x => x.Name == "GetScopePackagesByProjectId").Href);
+        var scopePackageResponse = await getResponse.Content.ReadFromJsonAsync<List<GetScopePackagesByProjectIdResponse>>();
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
-        Assert.Empty(endpointResponseForScopePackage!.Response);
+        Assert.Empty(scopePackageResponse!);
     }
 
     [Fact]

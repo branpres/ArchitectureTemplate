@@ -5,10 +5,10 @@ public class GetTests(IntegrationTestWebApplicationFactory webApplicationFactory
     [Fact]
     public async Task ShouldNotGetScopePackageIfDoesNotExist()
     {
-        var response = await _httpClient.GetAsync($"/scopepackage/{Guid.NewGuid()}");
-        var endpointResponse = await response.Content.ReadFromJsonAsync<EndpointResponse<List<GetScopePackagesByProjectIdResponse>>>();
+        var httpResponse = await _httpClient.GetAsync($"/scopepackage/{Guid.NewGuid()}");
+        var response = await httpResponse.Content.ReadFromJsonAsync<List<GetScopePackagesByProjectIdResponse>>();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Empty(endpointResponse!.Response);
+        Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        Assert.Empty(response!);
     }
 }

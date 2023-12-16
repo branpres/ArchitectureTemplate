@@ -24,7 +24,7 @@ internal class GetByProjectIdEndpoint : IEndpoint
         var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
-            getScopePackageByProjectIdResponse => Results.Ok(getScopePackageByProjectIdResponse.Map()),
+            getScopePackageByProjectIdResponse => Results.Ok(getScopePackageByProjectIdResponse),
             resultProblem => resultProblem.Errors.Count > 0
                 ? Results.BadRequest(new HttpValidationProblemDetails(resultProblem.Errors))
                 : Results.BadRequest());

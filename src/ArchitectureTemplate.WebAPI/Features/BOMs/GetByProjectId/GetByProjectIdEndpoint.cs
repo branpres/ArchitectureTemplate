@@ -25,7 +25,7 @@ internal class GetByProjectIdEndpoint : IEndpoint
         var result = await handler.Handle(request, cancellationToken);
 
         return result.Match(
-            getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse!.Map()),
+            getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse),
             resultProblem => resultProblem is NotFoundResultProblem
                 ? Results.NotFound()
                 : Results.BadRequest(

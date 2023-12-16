@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.WebAPI.Endpoints;
+﻿namespace ArchitectureTemplate.WebAPI.Features;
 
 public interface IEndpoint
 {

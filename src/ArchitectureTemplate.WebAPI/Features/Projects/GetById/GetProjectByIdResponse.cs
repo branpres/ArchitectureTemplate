@@ -5,7 +5,7 @@ public record GetProjectByIdResponse(
     Guid CompanyId,
     string ProjectName,
     string? ProjectIdentifier,
-    List<CreateProjectUserResponse>? ProjectUsers);
+    List<CreateProjectUserResponse>? ProjectUsers) : ResponseBase;
 
 internal static class Mapper
 {

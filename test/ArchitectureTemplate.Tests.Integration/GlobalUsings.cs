@@ -1,5 +1,4 @@
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.LocationBreakdownStructure;
-global using ArchitectureTemplate.WebAPI.Endpoints;
 global using ArchitectureTemplate.WebAPI.Features.BOMs.GetByProjectId;
 global using ArchitectureTemplate.WebAPI.Features.LocationBreakdownStructure.GetScopePackagesByProjectId;
 global using ArchitectureTemplate.WebAPI.Features.Projects.Create;

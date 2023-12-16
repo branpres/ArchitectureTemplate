@@ -36,13 +36,13 @@ internal class GetByIdEndpoint : IEndpoint
 
     private static IResult Ok(GetProjectByIdResponse getProjectByIdResponse)
     {
-        var links = new List<Link>
+        getProjectByIdResponse.Links = new List<Link>
         {
             { new Link("DeleteProject", $"/project/{getProjectByIdResponse.ProjectId}", HttpMethod.Delete.ToString()) },
             { new Link("GetBillOfMaterialsByProjectId", $"/bom/{getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) },
-            { new Link("GetScopeByProjectId", $"/scopepackage/{getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) }
+            { new Link("GetScopePackagesByProjectId", $"/scopepackage/{getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) }
         };
 
-        return Results.Ok(getProjectByIdResponse.Map(links));
+        return Results.Ok(getProjectByIdResponse);
     }
 }

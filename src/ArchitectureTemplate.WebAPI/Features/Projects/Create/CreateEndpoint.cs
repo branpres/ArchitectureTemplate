@@ -34,14 +34,14 @@ internal class CreateEndpoint : IEndpoint
 
     private static IResult Created(CreateProjectResponse createProjectResponse)
     {
-        var links = new List<Link>
+        createProjectResponse.Links = new List<Link>
         {
             { new Link("GetProjectById", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
             { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
             { new Link("GetBillOfMaterialsByProjectId", $"/bom/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
-            { new Link("GetScopeByProjectId", $"/scopepackage/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new Link("GetScopePackagesByProjectId", $"/scopepackage/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
         };
 
-        return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse.Map(links));
+        return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse);
     }
 }

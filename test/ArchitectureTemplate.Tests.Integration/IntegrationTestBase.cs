@@ -16,15 +16,15 @@ public abstract class IntegrationTestBase(IntegrationTestWebApplicationFactory w
         return await _httpClient.PostAsJsonAsync("/project", createProjectRequest);
     }
 
-    protected async Task<EndpointResponse<CreateProjectResponse>?> CreateProjectAndGetEndpointResponse(CreateProjectRequest createProjectRequest)
+    protected async Task<CreateProjectResponse?> CreateProjectAndGetResponse(CreateProjectRequest createProjectRequest)
     {
         var createResponse = await CreateProject(createProjectRequest);
-        return await createResponse.Content.ReadFromJsonAsync<EndpointResponse<CreateProjectResponse>>();
+        return await createResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
     }
 
     protected async Task<HttpResponseMessage> CreateProjectAndGetItBack(CreateProjectRequest createProjectRequest)
     {
-        var endpointResponse = await CreateProjectAndGetEndpointResponse(createProjectRequest);
+        var endpointResponse = await CreateProjectAndGetResponse(createProjectRequest);
         var getProjectByIdLink = endpointResponse!.Links!.First(x => x.Name == "GetProjectById").Href;
 
         return await _httpClient.GetAsync(getProjectByIdLink);
