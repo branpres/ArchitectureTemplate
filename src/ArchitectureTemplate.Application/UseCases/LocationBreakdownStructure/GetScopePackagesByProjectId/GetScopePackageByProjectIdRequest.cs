@@ -1,3 +1,0 @@
-﻿namespace ArchitectureTemplate.Application.UseCases.LocationBreakdownStructure.GetScopePackagesByProjectId;
-
-public record GetScopePackageByProjectIdRequest(Guid ProjectId);

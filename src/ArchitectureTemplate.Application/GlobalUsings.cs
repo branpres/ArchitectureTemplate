@@ -1,16 +1,6 @@
-﻿global using ArchitectureTemplate.Application.Domain.Aggregates;
-global using ArchitectureTemplate.Application.Domain.Aggregates.BOM;
-global using ArchitectureTemplate.Application.Domain.Aggregates.LocationBreakdownStructure;
-global using ArchitectureTemplate.Application.Domain.Aggregates.Projects;
-global using ArchitectureTemplate.Application.Domain.Aggregates.Projects.DomainEvents;
-global using ArchitectureTemplate.Application.Domain.DomainEvents;
-global using ArchitectureTemplate.Application.Domain.Results;
+﻿global using ArchitectureTemplate.Application.Domain.DomainEvents;
 global using ArchitectureTemplate.Application.Infrastructure;
-global using ArchitectureTemplate.Application.UseCases.Projects.Create;
-global using ArchitectureTemplate.Application.UseCases.Projects.CreateUser;
 global using FluentValidation;
-global using FluentValidation.Results;
-global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;
