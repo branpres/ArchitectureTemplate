@@ -1,10 +1,10 @@
-﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.DomainEventHandlers.ProjectDeleted;
+﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectDeleted.DomainEventHandlers;
 
-public class DeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeletedDomainEvent>
+public class DeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task Handle(ProjectDeletedDomainEvent domainEvent)
+    public async Task Handle(ProjectDeleted domainEvent)
     {
         var billOfMaterials = await _templateDbContext.BillOfMaterials
             .FirstOrDefaultAsync(x => x.ProjectId == domainEvent.Project.ProjectId && !x.IsDeleted);

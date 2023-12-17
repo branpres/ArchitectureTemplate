@@ -1,4 +1,4 @@
-﻿namespace ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing;
+﻿namespace ArchitectureTemplate.WebAPI.BackgroundServices;
 
 public class DomainEventOutboxProcessor(
     IServiceScopeFactory serviceScopeFactory,

@@ -41,7 +41,7 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public static Project Create(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
     {
         var project = new Project(companyId, projectName, projectTypeId, projectIdentifier);
-        project.RegisterDomainEvent(new ProjectCreatedDomainEvent(project));
+        project.RegisterDomainEvent(new ProjectCreated(project));
 
         return project;
     }
@@ -49,7 +49,7 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public void AddProjectUser(Guid userId)
     {
         var projectUser = ProjectUser.CreateNonAdminUser(this, userId);
-        projectUser.RegisterDomainEvent(new ProjectUserAddedDomainEvent(projectUser));
+        projectUser.RegisterDomainEvent(new ProjectUserAdded(projectUser));
 
         ProjectUsers.Add(projectUser);
     }
@@ -57,8 +57,8 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public void AddProjectAdminUser(Guid userId)
     {
         var projectUser = ProjectUser.CreateAdminUser(this, userId);
-        projectUser.RegisterDomainEvent(new ProjectUserAddedDomainEvent(projectUser));
-        projectUser.RegisterDomainEvent(new ProjectAdminUserAddedDomainEvent(projectUser));
+        projectUser.RegisterDomainEvent(new ProjectUserAdded(projectUser));
+        projectUser.RegisterDomainEvent(new ProjectAdminUserAdded(projectUser));
 
         ProjectUsers.Add(projectUser);
     }
@@ -68,6 +68,6 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
         IsDeleted = true;
         ProjectUsers.ForEach(x => x.SoftDelete());
 
-        RegisterDomainEvent(new ProjectDeletedDomainEvent(this));
+        RegisterDomainEvent(new ProjectDeleted(this));
     }
 }

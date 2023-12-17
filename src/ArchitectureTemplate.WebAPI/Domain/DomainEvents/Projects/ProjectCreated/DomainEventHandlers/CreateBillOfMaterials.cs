@@ -1,10 +1,10 @@
-﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.DomainEventHandlers.ProjectCreated;
+﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectCreated.DomainEventHandlers;
 
-public class CreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreatedDomainEvent>
+public class CreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
-    public async Task Handle(ProjectCreatedDomainEvent domainEvent)
+    public async Task Handle(ProjectCreated domainEvent)
     {
         var billOfMaterials = new BillOfMaterials
         {

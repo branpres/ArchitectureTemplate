@@ -1,3 +1,5 @@
+using ArchitectureTemplate.WebAPI.BackgroundServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +14,6 @@ builder.Services
     .AddScoped<ICurrentUser, CurrentUser>()
     .AddHostedService<DomainEventOutboxProcessor>()
     .AddDomainEventHandling()
-    .AddDomainEventOutboxMessageHandling()
     .AddDbContext<TemplateDbContext>(options =>
     {
         var connection = new SqliteConnection("Data Source=TemplateDB;Mode=Memory;Cache=Shared");

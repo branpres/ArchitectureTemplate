@@ -1,12 +1,13 @@
-﻿global using ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing;
-global using ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing.DomainEventOutboxMessageHandlers;
-global using ArchitectureTemplate.WebAPI.Domain.Aggregates;
+﻿global using ArchitectureTemplate.WebAPI.Domain.Aggregates;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.BOM;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.LocationBreakdownStructure;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Outbox;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
-global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents;
 global using ArchitectureTemplate.WebAPI.Domain.DomainEvents;
+global using ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectAdminUserAdded;
+global using ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectCreated;
+global using ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectDeleted;
+global using ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectUserAdded;
 global using ArchitectureTemplate.WebAPI.Features;
 global using ArchitectureTemplate.WebAPI.Infrastructure;
 global using ArchitectureTemplate.WebAPI.Middleware;
