@@ -9,7 +9,6 @@ builder.Services
     .AddExceptionHandler<ExceptionHandler>()
     .AddHttpContextAccessor()
     .AddValidatorsFromAssemblyContaining<Program>()
-    .AddRequestHandlers()
     .AddScoped<ICurrentUser, CurrentUser>()
     .AddHostedService<DomainEventOutboxProcessor>()
     .AddDomainEventHandling()

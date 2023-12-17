@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Middleware;
 
-internal class ExceptionHandler(ILogger<ExceptionHandler> logger, IWebHostEnvironment environment) : IExceptionHandler
+public class ExceptionHandler(ILogger<ExceptionHandler> logger, IWebHostEnvironment environment) : IExceptionHandler
 {
     private readonly ILogger<ExceptionHandler> _logger = logger;
     private readonly IWebHostEnvironment _environment = environment;

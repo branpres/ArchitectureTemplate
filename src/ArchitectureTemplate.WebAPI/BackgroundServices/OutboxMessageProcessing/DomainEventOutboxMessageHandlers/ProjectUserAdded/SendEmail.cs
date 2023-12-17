@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing.DomainEventOutboxMessageHandlers.ProjectUserAdded;
 
-internal class SendEmail : IDomainEventOutboxMessageHandler<ProjectUserAddedDomainEvent>
+public class SendEmail : IDomainEventOutboxMessageHandler<ProjectUserAddedDomainEvent>
 {
     public Task Handle(ProjectUserAddedDomainEvent domainEvent)
     {

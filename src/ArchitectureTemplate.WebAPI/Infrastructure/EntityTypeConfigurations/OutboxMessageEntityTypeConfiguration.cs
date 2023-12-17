@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Infrastructure.EntityTypeConfigurations;
 
-internal class OutboxMessageEntityTypeConfiguration : IEntityTypeConfiguration<OutboxMessage>
+public class OutboxMessageEntityTypeConfiguration : IEntityTypeConfiguration<OutboxMessage>
 {
     public void Configure(EntityTypeBuilder<OutboxMessage> builder)
     {

@@ -16,9 +16,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-	<InternalsVisibleTo Include="ArchitectureTemplate.Tests.Integration" />
-	<InternalsVisibleTo Include="ArchitectureTemplate.Tests.Validation" />
-  </ItemGroup>
-
 </Project>

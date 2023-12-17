@@ -8,7 +8,6 @@ global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents;
 global using ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 global using ArchitectureTemplate.WebAPI.Features;
-global using ArchitectureTemplate.WebAPI.Features.Projects.CreateUser;
 global using ArchitectureTemplate.WebAPI.Infrastructure;
 global using ArchitectureTemplate.WebAPI.Middleware;
 global using ArchitectureTemplate.WebAPI.Shared;

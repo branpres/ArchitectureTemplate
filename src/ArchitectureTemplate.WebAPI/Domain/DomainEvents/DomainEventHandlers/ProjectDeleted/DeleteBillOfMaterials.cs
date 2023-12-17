@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.DomainEventHandlers.ProjectDeleted;
 
-internal class DeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeletedDomainEvent>
+public class DeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeletedDomainEvent>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 

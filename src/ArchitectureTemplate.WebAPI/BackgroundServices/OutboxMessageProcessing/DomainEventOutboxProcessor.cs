@@ -1,6 +1,4 @@
-﻿using ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing.DomainEventOutboxMessageHandlers;
-
-namespace ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing;
+﻿namespace ArchitectureTemplate.WebAPI.BackgroundServices.OutboxMessageProcessing;
 
 public class DomainEventOutboxProcessor(
     IServiceScopeFactory serviceScopeFactory,

@@ -102,7 +102,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
 
         var getBillOfMaterialsLink = response!.Links!.First(x => x.Name == "GetBillOfMaterialsByProjectId").Href;
         var billOfMaterialsResponse = await _httpClient.GetAsync(getBillOfMaterialsLink);
-        var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetBillOfMaterialsByProjectIdResponse>();
+        var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetBomByProjectIdResponse>();
 
         Assert.True(responseForBom!.ProjectId == response!.ProjectId
             && responseForBom.BillOfMaterialsName == response.ProjectName);

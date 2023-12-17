@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Infrastructure.EntityTypeConfigurations;
 
-internal class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
+public class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
 {
     public void Configure(EntityTypeBuilder<Project> builder)
     {

@@ -9,13 +9,13 @@ public class TemplateDbContext(
 
     private readonly DomainEventDispatcher _domainEventDispatcher = domainEventDispatcher;
 
-    internal DbSet<Project> Project { get; set; }
+    public DbSet<Project> Project { get; set; }
 
-    internal DbSet<ProjectUser> ProjectUser {  get; set; }
+    public DbSet<ProjectUser> ProjectUser {  get; set; }
 
-    internal DbSet<BillOfMaterials> BillOfMaterials { get; set; }
+    public DbSet<BillOfMaterials> BillOfMaterials { get; set; }
 
-    internal DbSet<ScopePackage> ScopePackage { get; set; }
+    public DbSet<ScopePackage> ScopePackage { get; set; }
 
     public DbSet<OutboxMessage> OutboxMessage { get; set; }
 

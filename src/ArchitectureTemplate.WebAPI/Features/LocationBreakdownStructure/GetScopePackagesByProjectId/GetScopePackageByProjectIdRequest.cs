@@ -1,3 +1,0 @@
-﻿namespace ArchitectureTemplate.WebAPI.Features.LocationBreakdownStructure.GetScopePackagesByProjectId;
-
-public record GetScopePackageByProjectIdRequest(Guid ProjectId);

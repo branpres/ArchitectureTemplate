@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.BOM;
 
-internal class BillOfMaterials : IBasicMetadata, IDeleteMetadata
+public class BillOfMaterials : IBasicMetadata, IDeleteMetadata
 {
     public Guid BillOfMaterialsId { get; set; }
 

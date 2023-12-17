@@ -1,6 +1,6 @@
-﻿namespace ArchitectureTemplate.WebAPI.Features.Projects;
+﻿namespace ArchitectureTemplate.WebAPI.Shared;
 
-internal static class Queries
+public static class ProjectQueries
 {
     public async static Task<bool> IsProjectNameAvailable(this IQueryable<Project> project, Guid companyId, string projectName, CancellationToken cancellationToken)
     {

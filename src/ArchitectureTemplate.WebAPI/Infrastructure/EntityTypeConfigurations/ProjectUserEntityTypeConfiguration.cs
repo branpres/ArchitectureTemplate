@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Infrastructure.EntityTypeConfigurations;
 
-internal class ProjectUserEntityTypeConfiguration : IEntityTypeConfiguration<ProjectUser>
+public class ProjectUserEntityTypeConfiguration : IEntityTypeConfiguration<ProjectUser>
 {
     public void Configure(EntityTypeBuilder<ProjectUser> builder)
     {

@@ -1,5 +1,5 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 
-internal interface IDomainEvent
+public interface IDomainEvent
 {
 }

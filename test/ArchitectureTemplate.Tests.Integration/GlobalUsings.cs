@@ -1,8 +1,4 @@
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.LocationBreakdownStructure;
-global using ArchitectureTemplate.WebAPI.Features.BOMs.GetByProjectId;
-global using ArchitectureTemplate.WebAPI.Features.LocationBreakdownStructure.GetScopePackagesByProjectId;
-global using ArchitectureTemplate.WebAPI.Features.Projects.Create;
-global using ArchitectureTemplate.WebAPI.Features.Projects.GetById;
 global using ArchitectureTemplate.WebAPI.Infrastructure;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting;
@@ -22,3 +18,7 @@ global using System.Security.Claims;
 global using System.Text.Encodings.Web;
 global using Testcontainers.MySql;
 global using Xunit;
+global using static ArchitectureTemplate.WebAPI.Features.BOMs.GetByProjectId;
+global using static ArchitectureTemplate.WebAPI.Features.LocationBreakdownStructure.GetScopePackagesByProjectId;
+global using static ArchitectureTemplate.WebAPI.Features.Projects.Create;
+global using static ArchitectureTemplate.WebAPI.Features.Projects.GetById;

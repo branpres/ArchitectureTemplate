@@ -1,3 +1,3 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents;
 
-internal record ProjectUserAddedDomainEvent(ProjectUser ProjectUser) : IDomainEvent;
+public record ProjectUserAddedDomainEvent(ProjectUser ProjectUser) : IDomainEvent;
