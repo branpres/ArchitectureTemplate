@@ -2,6 +2,13 @@
 
 public static class Create
 {
+    public record CreateProjectRequest(
+        Guid CompanyId,
+        string ProjectName,
+        string? ProjectIdentifier = null,
+        Guid? ProjectTypeId = null,
+        Guid? AdminUserId = null);
+
     public class Endpoint : IEndpoint
     {
         public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
@@ -49,14 +56,7 @@ public static class Create
 
             return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse);
         }
-    }
-
-    public record CreateProjectRequest(
-        Guid CompanyId,
-        string ProjectName,
-        string? ProjectIdentifier = null,
-        Guid? ProjectTypeId = null,
-        Guid? AdminUserId = null);
+    }    
 
     public class CreateProjectValidator : AbstractValidator<CreateProjectRequest>
     {
