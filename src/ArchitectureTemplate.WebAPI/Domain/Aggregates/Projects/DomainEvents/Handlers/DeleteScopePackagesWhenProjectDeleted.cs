@@ -1,6 +1,6 @@
-﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents.Projects.ProjectDeleted.DomainEventHandlers;
+﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class DeleteScopePackages(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
+public class DeleteScopePackagesWhenProjectDeleted(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
