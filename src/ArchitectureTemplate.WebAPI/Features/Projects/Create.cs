@@ -1,11 +1,11 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Features.Projects;
 
 public record CreateProjectRequest(
-        Guid CompanyId,
-        string ProjectName,
-        string? ProjectIdentifier = null,
-        Guid? ProjectTypeId = null,
-        Guid? AdminUserId = null);
+    Guid CompanyId,
+    string ProjectName,
+    string? ProjectIdentifier = null,
+    Guid? ProjectTypeId = null,
+    Guid? AdminUserId = null);
 
 public class CreateProjectEndpoint : IEndpoint
 {
