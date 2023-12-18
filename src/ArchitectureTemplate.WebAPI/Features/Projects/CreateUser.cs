@@ -1,23 +1,20 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Features.Projects;
 
-public static class CreateUser
-{
-    public record CreateUserResponse(
-        Guid ProjectUserId,
-        Guid ProjectId,
-        Guid UserId,
-        bool IsAdmin);
-}
+public record CreateProjectUserResponse(
+    Guid ProjectUserId,
+    Guid ProjectId,
+    Guid UserId,
+    bool IsAdmin);
 
-internal static class CreateUserResponseMapper
+public static class CreateProjectUserResponseMapper
 {
-    public static List<CreateUser.CreateUserResponse>? MapToCreateUserResponses(this Project project)
+    public static List<CreateProjectUserResponse>? MapToCreateUserResponses(this Project project)
     {
-        List<CreateUser.CreateUserResponse>? createProjectUserResponses = null;
+        List<CreateProjectUserResponse>? createProjectUserResponses = null;
         if (project.ProjectUsers.Count != 0)
         {
             createProjectUserResponses = project.ProjectUsers
-                .Select(x => new CreateUser.CreateUserResponse(x.ProjectUserId, x.ProjectId, x.UserId, x.IsAdmin))
+                .Select(x => new CreateProjectUserResponse(x.ProjectUserId, x.ProjectId, x.UserId, x.IsAdmin))
                 .ToList();
         }
 

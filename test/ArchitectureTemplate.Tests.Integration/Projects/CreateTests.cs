@@ -15,7 +15,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
         var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
-        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
+        var response = await httpResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
 
         Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         Assert.True(response!.CompanyId == createProjectRequest.CompanyId
@@ -28,7 +28,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
         var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
-        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
+        var response = await httpResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
 
         Assert.False(response!.ProjectUsers!.Single().IsAdmin);
     }
@@ -38,7 +38,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid(), Guid.NewGuid());
         var httpResponse = await CreateProjectAndGetItBack(createProjectRequest);
-        var response = await httpResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
+        var response = await httpResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
 
         Assert.Equal(2, response!.ProjectUsers!.Count);
         Assert.Single(response.ProjectUsers.Where(x => x.IsAdmin));
@@ -98,11 +98,11 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
         var createProjectResponse = await CreateProjectAndGetItBack(createProjectRequest);
-        var response = await createProjectResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
+        var response = await createProjectResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
 
         var getBillOfMaterialsLink = response!.Links!.First(x => x.Name == "GetBillOfMaterialsByProjectId").Href;
         var billOfMaterialsResponse = await _httpClient.GetAsync(getBillOfMaterialsLink);
-        var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetBomByProjectIdResponse>();
+        var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetByProjectIdResponse>();
 
         Assert.True(responseForBom!.ProjectId == response!.ProjectId
             && responseForBom.BillOfMaterialsName == response.ProjectName);
@@ -113,7 +113,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
     {
         var createProjectRequest = new CreateProjectRequest(Guid.NewGuid(), "Test", "Test", Guid.NewGuid());
         var createProjectResponse = await CreateProjectAndGetItBack(createProjectRequest);
-        var response = await createProjectResponse.Content.ReadFromJsonAsync<GetProjectByIdResponse>();
+        var response = await createProjectResponse.Content.ReadFromJsonAsync<CreateProjectResponse>();
 
         var getScopePackageLink = response!.Links!.First(x => x.Name == "GetScopePackagesByProjectId").Href;
         var scopePackageResponse = await _httpClient.GetAsync(getScopePackageLink);

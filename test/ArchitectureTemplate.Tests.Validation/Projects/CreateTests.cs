@@ -5,7 +5,7 @@ public class CreateTests
     [Fact]
     public void ShouldValidateRequest()
     {
-        var validator = new CreateProjectValidator();
+        var validator = new CreateProjectRequestValidator();
 
         var validationResult = validator.TestValidate(new CreateProjectRequest(Guid.NewGuid(), "Test", "Test"));
 
@@ -19,7 +19,7 @@ public class CreateTests
     [InlineData("b0bd7b02-0947-4438-bb1d-a5e19cf8e6be", "Test", "11111111111111111111111111111111111111111111111111111111111111111", "ProjectIdentifier", "MaximumLengthValidator")]
     public void ShouldNotValidateRequest(string companyId, string projectName, string projectIdentifier, string propertyNameWithExpectedErrorCode, string expectedErrorCode)
     {
-        var validator = new CreateProjectValidator();
+        var validator = new CreateProjectRequestValidator();
 
         var validationResult = validator.TestValidate(new CreateProjectRequest(new Guid(companyId), projectName, projectIdentifier));
 

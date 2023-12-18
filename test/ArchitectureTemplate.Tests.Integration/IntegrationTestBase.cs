@@ -24,8 +24,8 @@ public abstract class IntegrationTestBase(IntegrationTestWebApplicationFactory w
 
     protected async Task<HttpResponseMessage> CreateProjectAndGetItBack(CreateProjectRequest createProjectRequest)
     {
-        var endpointResponse = await CreateProjectAndGetResponse(createProjectRequest);
-        var getProjectByIdLink = endpointResponse!.Links!.First(x => x.Name == "GetProjectById").Href;
+        var createResponse = await CreateProjectAndGetResponse(createProjectRequest);
+        var getProjectByIdLink = createResponse!.Links!.First(x => x.Name == "GetProjectById").Href;
 
         return await _httpClient.GetAsync(getProjectByIdLink);
     }
