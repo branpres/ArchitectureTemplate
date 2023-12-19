@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class CreateBillOfMaterialsWhenProjectCreated(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
+public class WhenProjectCreatedCreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 

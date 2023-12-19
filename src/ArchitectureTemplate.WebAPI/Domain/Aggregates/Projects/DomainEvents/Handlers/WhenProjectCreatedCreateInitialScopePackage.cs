@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class CreateInitialScopePackageWhenProjectCreated(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
+public class WhenProjectCreatedCreateInitialScopePackage(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 

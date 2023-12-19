@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class DeleteBillOfMaterialsWhenProjectDeleted(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
+public class WhenProjectDeletedDeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
 {
     private readonly TemplateDbContext _templateDbContext = templateDbContext;
 
