@@ -17,7 +17,7 @@ public class DeleteProjectEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> Delete(
+    private static async Task<IResult> Delete(
         Guid projectId,
         TemplateDbContext templateDbContext,
         CancellationToken cancellationToken)
@@ -38,11 +38,9 @@ public class DeleteProjectEndpoint : IEndpoint
 
 public class DeleteProjectHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task<Result> Handle(Guid projectId, CancellationToken cancellationToken)
     {
-        var project = await _templateDbContext.Project.GetProjectWithProjectUsers(projectId, cancellationToken);
+        var project = await templateDbContext.Project.GetProjectWithProjectUsers(projectId, cancellationToken);
 
         if (project == null)
         {
@@ -50,7 +48,7 @@ public class DeleteProjectHandler(TemplateDbContext templateDbContext) : IReques
         }
 
         project.SoftDelete();
-        await _templateDbContext.SaveChangesAsync(cancellationToken);
+        await templateDbContext.SaveChangesAsync(cancellationToken);
 
         return new Result();
     }

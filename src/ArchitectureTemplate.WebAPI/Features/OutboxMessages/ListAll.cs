@@ -16,7 +16,7 @@ public class ListAllOutboxMessagesEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> List(TemplateDbContext templateDbContext, CancellationToken cancellationToken)
+    private static async Task<IResult> List(TemplateDbContext templateDbContext, CancellationToken cancellationToken)
     {
         var outboxMessages = await templateDbContext.OutboxMessage
             .Include(x => x.OutboxMessageHandlerInstances)

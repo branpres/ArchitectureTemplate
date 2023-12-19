@@ -2,11 +2,9 @@
 
 public class WhenProjectDeletedDeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task Handle(ProjectDeleted domainEvent)
     {
-        var billOfMaterials = await _templateDbContext.BillOfMaterials
+        var billOfMaterials = await templateDbContext.BillOfMaterials
             .FirstOrDefaultAsync(x => x.ProjectId == domainEvent.Project.ProjectId && !x.IsDeleted);
         billOfMaterials?.SoftDelete();
 

@@ -24,7 +24,7 @@ public class CreateProjectEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> Create(
+    private static async Task<IResult> Create(
         CreateProjectRequest request,
         IValidator<CreateProjectRequest> validator,
         ICurrentUser currentUser,
@@ -45,12 +45,12 @@ public class CreateProjectEndpoint : IEndpoint
     private static IResult Created(CreateProjectResponse createProjectResponse)
     {
         createProjectResponse.Links = new List<Link>
-            {
-                { new Link("GetProjectById", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
-                { new Link("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
-                { new Link("GetBillOfMaterialsByProjectId", $"/bom?projectId={createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
-                { new Link("GetScopePackagesByProjectId", $"/scopepackage?projectId={createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
-            };
+        {
+            { new("GetProjectById", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new("DeleteProject", $"/project/{createProjectResponse.ProjectId}", HttpMethod.Delete.ToString()) },
+            { new("GetBillOfMaterialsByProjectId", $"/bom?projectId={createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new("GetScopePackagesByProjectId", $"/scopepackage?projectId={createProjectResponse.ProjectId}", HttpMethod.Get.ToString()) },
+        };
 
         return Results.Created($"/project/{createProjectResponse.ProjectId}", createProjectResponse);
     }
@@ -71,15 +71,11 @@ public class CreateProjectRequestValidator : AbstractValidator<CreateProjectRequ
 }
 
 public class CreateProjectHandler(
-        IValidator<CreateProjectRequest> validator,
-        ICurrentUser currentUser,
-        TemplateDbContext templateDbContext)
-        : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
+    IValidator<CreateProjectRequest> validator,
+    ICurrentUser currentUser,
+    TemplateDbContext templateDbContext)
+    : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
 {
-    private readonly IValidator<CreateProjectRequest> _validator = validator;
-    private readonly ICurrentUser _currentUser = currentUser;
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task<Result<CreateProjectResponse>> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
     {
         var validationResult = await Validate(request, cancellationToken);
@@ -90,8 +86,8 @@ public class CreateProjectHandler(
 
         var project = Create(request);
 
-        await _templateDbContext.Project.AddAsync(project, cancellationToken);
-        await _templateDbContext.SaveChangesAsync(cancellationToken);
+        await templateDbContext.Project.AddAsync(project, cancellationToken);
+        await templateDbContext.SaveChangesAsync(cancellationToken);
 
         var result = new Result<CreateProjectResponse>(project.MapToCreateResponse());
         return result;
@@ -99,7 +95,7 @@ public class CreateProjectHandler(
 
     private async Task<(bool IsValid, Result<CreateProjectResponse>? Result)> Validate(CreateProjectRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             return (false, new Result<CreateProjectResponse>(new ResultProblem(validationResult.Errors)));
@@ -107,12 +103,12 @@ public class CreateProjectHandler(
 
         var invalidCreateDataResultProblem = new ResultProblem();
 
-        if (!await _templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName, cancellationToken))
+        if (!await templateDbContext.Project.IsProjectNameAvailable(request.CompanyId, request.ProjectName, cancellationToken))
         {
             invalidCreateDataResultProblem.AddError("ProjectName", "Project name already exists for this company.");
         }
 
-        if (request.ProjectIdentifier != null && !await _templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier, cancellationToken))
+        if (request.ProjectIdentifier != null && !await templateDbContext.Project.IsProjectIdentifierAvailable(request.CompanyId, request.ProjectIdentifier, cancellationToken))
         {
             invalidCreateDataResultProblem.AddError("ProjectIdentifier", "Project identifier already exists for this company.");
         }
@@ -127,16 +123,16 @@ public class CreateProjectHandler(
 
     private Project Create(CreateProjectRequest request)
     {
-        var project = Project.Create(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
+        var project = new Project(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
 
         if (request.AdminUserId.HasValue)
         {
             project.AddProjectAdminUser(request.AdminUserId.Value);
         }
 
-        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != _currentUser.User!.UserId) || !request.AdminUserId.HasValue)
+        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != currentUser.User!.UserId) || !request.AdminUserId.HasValue)
         {
-            project.AddProjectUser(_currentUser.User!.UserId);
+            project.AddProjectUser(currentUser.User!.UserId);
         }
 
         return project;

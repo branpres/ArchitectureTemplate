@@ -5,10 +5,6 @@ public class TemplateDbContext(
     ICurrentUser currentUser,
     DomainEventDispatcher domainEventDispatcher) : DbContext(options)
 {
-    private readonly ICurrentUser _currentUser = currentUser;
-
-    private readonly DomainEventDispatcher _domainEventDispatcher = domainEventDispatcher;
-
     public DbSet<Project> Project { get; set; }
 
     public DbSet<ProjectUser> ProjectUser {  get; set; }
@@ -26,9 +22,9 @@ public class TemplateDbContext(
         base.OnModelCreating(modelBuilder);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _domainEventDispatcher.DispatchDomainEvents(this);
+        await domainEventDispatcher.DispatchDomainEvents(this);
 
         foreach (var entry in ChangeTracker.Entries<IBasicMetadata>())
         {
@@ -36,18 +32,18 @@ public class TemplateDbContext(
             {
                 case EntityState.Added:
                     entry.Entity.CreatedOn = DateTime.UtcNow;
-                    if (_currentUser.User != null)
+                    if (currentUser.User != null)
                     {
-                        entry.Entity.CreatedBy = _currentUser.User.UserId;
+                        entry.Entity.CreatedBy = currentUser.User.UserId;
                     }                    
                     
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.UpdatedOn = DateTime.UtcNow;
-                    if (_currentUser.User != null)
+                    if (currentUser.User != null)
                     {
-                        entry.Entity.UpdatedBy = _currentUser.User.UserId;
+                        entry.Entity.UpdatedBy = currentUser.User.UserId;
                     }
                     
                     break;
@@ -62,9 +58,9 @@ public class TemplateDbContext(
                     if (entry.Entity.IsDeleted)
                     {
                         entry.Entity.DeletedOn = DateTime.UtcNow;
-                        if (_currentUser.User != null)
+                        if (currentUser.User != null)
                         {
-                            entry.Entity.DeletedBy = _currentUser.User.UserId;
+                            entry.Entity.DeletedBy = currentUser.User.UserId;
                         }
                     }
                     break;

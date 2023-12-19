@@ -5,19 +5,15 @@ public class DomainEventOutboxProcessor(
     ILogger<DomainEventOutboxProcessor> logger,
     IConfiguration configuration) : BackgroundService
 {
-    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
-    private readonly ILogger<DomainEventOutboxProcessor> _logger = logger;
-    private readonly IConfiguration _configuration = configuration;
-
     private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(10));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var maxNumberOfTries = int.Parse(_configuration["DomainEventOutboxProcessor:MaxNumberOfTries"]!);
+        var maxNumberOfTries = int.Parse(configuration["DomainEventOutboxProcessor:MaxNumberOfTries"]!);
 
         while (!stoppingToken.IsCancellationRequested && await _timer.WaitForNextTickAsync(stoppingToken))
         {
-            using var scope = _serviceScopeFactory.CreateScope();
+            using var scope = serviceScopeFactory.CreateScope();
 
             var templateDbContext = scope.ServiceProvider.GetRequiredService<TemplateDbContext>();
 
@@ -40,10 +36,10 @@ public class DomainEventOutboxProcessor(
                     if (domainEvent != null)
                     {
                         var domainEventOutboxMessageHandlerType = typeof(IDomainEventOutboxMessageHandler<>).MakeGenericType(domainEvent.GetType());
-                        var handleMethod = domainEventOutboxMessageHandlerType.GetMethod("Handle");
-                        var domainEventOutboxMessageHandlers = scope.ServiceProvider.GetServices(domainEventOutboxMessageHandlerType);
-                        if (domainEventOutboxMessageHandlers != null && domainEventOutboxMessageHandlers.Any())
+                        if (domainEventOutboxMessageHandlerType != null)
                         {
+                            var handleMethod = domainEventOutboxMessageHandlerType.GetMethod("Handle");
+                            var domainEventOutboxMessageHandlers = scope.ServiceProvider.GetServices(domainEventOutboxMessageHandlerType).ToList();
                             foreach (var domainEventOutboxMessageHandler in domainEventOutboxMessageHandlers)
                             {
                                 if (domainEventOutboxMessageHandler != null)
@@ -69,15 +65,15 @@ public class DomainEventOutboxProcessor(
                                     {
                                         outboxMessageHandlerInstance.MarkFailed();
 
-                                        _logger.LogError(ex, "Exception occurred when invoking outbox message handler.");
+                                        logger.LogError(ex, "Exception occurred when invoking outbox message handler.");
                                     }
                                 }
                             }
-                        }
+                        }                        
                     }
 
                     var outboxMessageStatus = outboxMessage.OutboxMessageHandlerInstances
-                        .All(x => x.OutboxMessageHandlerInstanceStatus == OutboxMessageHandlerInstanceStatus.Succeeded)
+                        .TrueForAll(x => x.OutboxMessageHandlerInstanceStatus == OutboxMessageHandlerInstanceStatus.Succeeded)
                             ? OutboxMessageStatus.ProcessingComplete
                             : OutboxMessageStatus.ProcessingFailed;
 
@@ -97,7 +93,7 @@ public class DomainEventOutboxProcessor(
                             .SetProperty(y => y.UpdatedOn, DateTime.UtcNow),
                             stoppingToken);
 
-                    _logger.LogError(ex, "Exception occurred when processing outbox message.");
+                    logger.LogError(ex, "Exception occurred when processing outbox message.");
                 }
             }
 

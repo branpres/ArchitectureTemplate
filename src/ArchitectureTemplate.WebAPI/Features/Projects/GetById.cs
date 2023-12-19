@@ -17,7 +17,7 @@ public class GetProjectByIdEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> Get(
+    private static async Task<IResult> Get(
         Guid projectId,
         TemplateDbContext templateDbContext,
         CancellationToken cancellationToken)
@@ -38,11 +38,11 @@ public class GetProjectByIdEndpoint : IEndpoint
     private static IResult Ok(GetProjectByIdResponse getProjectByIdResponse)
     {
         getProjectByIdResponse.Links = new List<Link>
-            {
-                { new Link("DeleteProject", $"/project/{getProjectByIdResponse.ProjectId}", HttpMethod.Delete.ToString()) },
-                { new Link("GetBillOfMaterialsByProjectId", $"/bom?projectId={getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) },
-                { new Link("GetScopePackagesByProjectId", $"/scopepackage?projectId={getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) }
-            };
+        {
+            { new("DeleteProject", $"/project/{getProjectByIdResponse.ProjectId}", HttpMethod.Delete.ToString()) },
+            { new("GetBillOfMaterialsByProjectId", $"/bom?projectId={getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) },
+            { new("GetScopePackagesByProjectId", $"/scopepackage?projectId={getProjectByIdResponse.ProjectId}", HttpMethod.Get.ToString()) }
+        };
 
         return Results.Ok(getProjectByIdResponse);
     }
@@ -50,20 +50,15 @@ public class GetProjectByIdEndpoint : IEndpoint
 
 public class GetProjectByIdHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, GetProjectByIdResponse>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task<Result<GetProjectByIdResponse>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
-        var project = await _templateDbContext.Project
+        var project = await templateDbContext.Project
             .AsNoTracking()
             .GetProjectWithProjectUsers(projectId, cancellationToken);
 
-        if (project == null)
-        {
-            return new Result<GetProjectByIdResponse>(new NotFoundResultProblem());
-        }
-
-        return new Result<GetProjectByIdResponse>(project.MapToGetByIdResponse());
+        return project == null
+            ? new Result<GetProjectByIdResponse>(new NotFoundResultProblem())
+            : new Result<GetProjectByIdResponse>(project.MapToGetByIdResponse());
     }
 }
 

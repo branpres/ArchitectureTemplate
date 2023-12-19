@@ -17,7 +17,7 @@ public class GetByProjectIdEndpoint : IEndpoint
         return builder;
     }
 
-    private async Task<IResult> Get(
+    private static async Task<IResult> Get(
         Guid projectId,
         TemplateDbContext templateDbContext,
         CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class GetByProjectIdEndpoint : IEndpoint
         var result = await handler.Handle(projectId, cancellationToken);
 
         return result.Match(
-            getBillOfMaterialsByProjectIdResponse => Results.Ok(getBillOfMaterialsByProjectIdResponse),
+            Results.Ok,
             resultProblem => resultProblem is NotFoundResultProblem
                 ? Results.NotFound()
                 : Results.BadRequest(
@@ -38,20 +38,15 @@ public class GetByProjectIdEndpoint : IEndpoint
 
 public class GetByProjectIdHandler(TemplateDbContext templateDbContext) : IRequestHandler<Guid, GetByProjectIdResponse>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task<Result<GetByProjectIdResponse>> Handle(Guid projectId, CancellationToken cancellationToken)
     {
-        var billOfMaterials = await _templateDbContext.BillOfMaterials
+        var billOfMaterials = await templateDbContext.BillOfMaterials
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.ProjectId == projectId && !x.IsDeleted, cancellationToken);
 
-        if (billOfMaterials == null)
-        {
-            return new Result<GetByProjectIdResponse>(new NotFoundResultProblem());
-        }
-
-        return new Result<GetByProjectIdResponse>(billOfMaterials.MapToGetByProjectIdResponse());
+        return billOfMaterials == null
+            ? new Result<GetByProjectIdResponse>(new NotFoundResultProblem())
+            : new Result<GetByProjectIdResponse>(billOfMaterials.MapToGetByProjectIdResponse());
     }
 }
 

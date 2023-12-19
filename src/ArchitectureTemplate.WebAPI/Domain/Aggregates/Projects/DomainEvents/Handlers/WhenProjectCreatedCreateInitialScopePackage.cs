@@ -2,8 +2,6 @@
 
 public class WhenProjectCreatedCreateInitialScopePackage(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task Handle(ProjectCreated domainEvent)
     {
         var scopePackage = new ScopePackage
@@ -11,7 +9,7 @@ public class WhenProjectCreatedCreateInitialScopePackage(TemplateDbContext templ
             ProjectId = domainEvent.Project.ProjectId
         };
 
-        await _templateDbContext.ScopePackage.AddAsync(scopePackage);
+        await templateDbContext.ScopePackage.AddAsync(scopePackage);
 
         Console.WriteLine("Scope Package Created");
     }

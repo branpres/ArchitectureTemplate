@@ -2,8 +2,6 @@
 
 public class WhenProjectCreatedCreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
 {
-    private readonly TemplateDbContext _templateDbContext = templateDbContext;
-
     public async Task Handle(ProjectCreated domainEvent)
     {
         var billOfMaterials = new BillOfMaterials
@@ -12,7 +10,7 @@ public class WhenProjectCreatedCreateBillOfMaterials(TemplateDbContext templateD
             BillOfMaterialsName = domainEvent.Project.ProjectName!
         };
 
-        await _templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);
+        await templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);
 
         Console.WriteLine("Bill Of Materials Created");
     }

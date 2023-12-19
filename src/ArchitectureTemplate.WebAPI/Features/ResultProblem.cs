@@ -40,6 +40,4 @@ public class ResultProblem
     }
 }
 
-public class NotFoundResultProblem : ResultProblem
-{
-}
+public class NotFoundResultProblem : ResultProblem;

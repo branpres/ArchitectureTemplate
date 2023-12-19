@@ -104,7 +104,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
         var billOfMaterialsResponse = await _httpClient.GetAsync(getBillOfMaterialsLink);
         var responseForBom = await billOfMaterialsResponse.Content.ReadFromJsonAsync<GetByProjectIdResponse>();
 
-        Assert.True(responseForBom!.ProjectId == response!.ProjectId
+        Assert.True(responseForBom!.ProjectId == response.ProjectId
             && responseForBom.BillOfMaterialsName == response.ProjectName);
     }
 
@@ -119,7 +119,7 @@ public class CreateTests(IntegrationTestWebApplicationFactory webApplicationFact
         var scopePackageResponse = await _httpClient.GetAsync(getScopePackageLink);
         var responseForScopePackage = await scopePackageResponse.Content.ReadFromJsonAsync<List<GetScopePackagesByProjectIdResponse>>();
 
-        Assert.True(responseForScopePackage!.Single().ProjectId == response!.ProjectId
+        Assert.True(responseForScopePackage!.Single().ProjectId == response.ProjectId
             && responseForScopePackage!.Single().ScopePackageName == ScopePackage.DEFAULT_SCOPE_PACKAGE_NAME);
     }
 }

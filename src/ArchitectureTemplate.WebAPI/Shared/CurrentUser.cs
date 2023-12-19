@@ -11,15 +11,13 @@ public interface ICurrentUser
 
 public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-
     public UserResponse? User => GetAuthenticatedUserFromHttpContext();
 
     public bool? IsAdmin => User?.IsAdmin;
 
     private UserResponse? GetAuthenticatedUserFromHttpContext()
     {
-        var httpContext = _httpContextAccessor.HttpContext;
+        var httpContext = httpContextAccessor.HttpContext;
         if (httpContext == null)
         {
             return null;

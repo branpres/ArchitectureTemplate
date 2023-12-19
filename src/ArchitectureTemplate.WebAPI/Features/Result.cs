@@ -3,7 +3,7 @@
 public class Result<T>
 {
     private readonly T? _value;
-    private readonly ResultProblem? _problem = null;
+    private readonly ResultProblem? _problem;
 
     public Result(T value)
     {
@@ -27,7 +27,7 @@ public class Result<T>
 
 public class Result
 {
-    private readonly ResultProblem? _problem = null;
+    private readonly ResultProblem? _problem;
 
     public Result()
     {

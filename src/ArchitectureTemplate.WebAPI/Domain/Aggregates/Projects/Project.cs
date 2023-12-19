@@ -4,12 +4,14 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
     private Project() { }
 
-    private Project(Guid companyId, string projectName, Guid? projectTypeId, string? projectIdentifier)
+    public Project(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
     {
         CompanyId = companyId;
         ProjectName = projectName;
         ProjectTypeId = projectTypeId;
         ProjectIdentifier = projectIdentifier;
+
+        RegisterDomainEvent(new ProjectCreated(this));
     }
 
     public Guid ProjectId { get; private set; }
@@ -37,14 +39,6 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public DateTime? DeletedOn { get; set; }
 
     public Guid? DeletedBy { get; set; }
-
-    public static Project Create(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
-    {
-        var project = new Project(companyId, projectName, projectTypeId, projectIdentifier);
-        project.RegisterDomainEvent(new ProjectCreated(project));
-
-        return project;
-    }
 
     public void AddProjectUser(Guid userId)
     {
