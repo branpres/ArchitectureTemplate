@@ -1,10 +1,13 @@
-﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
+﻿using ArchitectureTemplate.WebAPI.Features.Projects;
+using ArchitectureTemplate.WebAPI.Shared;
+
+namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
 
 public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
 {
     private Project() { }
 
-    public Project(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
+    private Project(Guid companyId, string projectName, Guid? projectTypeId = null, string? projectIdentifier = null)
     {
         CompanyId = companyId;
         ProjectName = projectName;
@@ -39,6 +42,23 @@ public class Project : DomainEventEntityBase, IBasicMetadata, IDeleteMetadata
     public DateTime? DeletedOn { get; set; }
 
     public Guid? DeletedBy { get; set; }
+
+    public static Project Create(CreateProjectRequest request, ICurrentUser currentUser)
+    {
+        var project = new Project(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
+
+        if (request.AdminUserId.HasValue)
+        {
+            project.AddProjectAdminUser(request.AdminUserId.Value);
+        }
+
+        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != currentUser.User!.UserId) || !request.AdminUserId.HasValue)
+        {
+            project.AddProjectUser(currentUser.User!.UserId);
+        }
+
+        return project;
+    }
 
     public void AddProjectUser(Guid userId)
     {

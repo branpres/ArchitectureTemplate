@@ -1,12 +1,5 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Features.Projects;
 
-public record CreateProjectRequest(
-    Guid CompanyId,
-    string ProjectName,
-    string? ProjectIdentifier = null,
-    Guid? ProjectTypeId = null,
-    Guid? AdminUserId = null);
-
 public class CreateProjectEndpoint : IEndpoint
 {
     public IEndpointRouteBuilder MapEndpoint(IEndpointRouteBuilder builder)
@@ -56,6 +49,13 @@ public class CreateProjectEndpoint : IEndpoint
     }
 }
 
+public record CreateProjectRequest(
+    Guid CompanyId,
+    string ProjectName,
+    string? ProjectIdentifier = null,
+    Guid? ProjectTypeId = null,
+    Guid? AdminUserId = null);
+
 public class CreateProjectRequestValidator : AbstractValidator<CreateProjectRequest>
 {
     public CreateProjectRequestValidator()
@@ -84,7 +84,7 @@ public class CreateProjectHandler(
             return validationResult.Result!;
         }
 
-        var project = Create(request);
+        var project = Project.Create(request, currentUser);
 
         await templateDbContext.Project.AddAsync(project, cancellationToken);
         await templateDbContext.SaveChangesAsync(cancellationToken);
@@ -119,23 +119,6 @@ public class CreateProjectHandler(
         }
 
         return (true, null);
-    }
-
-    private Project Create(CreateProjectRequest request)
-    {
-        var project = new Project(request.CompanyId, request.ProjectName, request.ProjectTypeId, request.ProjectIdentifier);
-
-        if (request.AdminUserId.HasValue)
-        {
-            project.AddProjectAdminUser(request.AdminUserId.Value);
-        }
-
-        if ((request.AdminUserId.HasValue && request.AdminUserId.Value != currentUser.User!.UserId) || !request.AdminUserId.HasValue)
-        {
-            project.AddProjectUser(currentUser.User!.UserId);
-        }
-
-        return project;
     }
 }
 
