@@ -15,7 +15,7 @@ Long story short, this template is a demonstration of my latest personal opinion
 - FluentValidation
 - EF Core
 - Testcontainers (for spinning up a docker container for integration testing against a real MySQL database)
-- HATEOAS (not happy with how I'm currently providing links in responses, but hopefully can eventually find a decent way of doing this generically)
+- HATEOAS (various actions that can be performed on a resource that are returned as links with an endpoint response)
 - CQRS (ish)
 - DDD (still learning how to apply some of the concepts - perhaps DDD lite at best)
 - Domain Events
