@@ -20,7 +20,8 @@ builder.Services
         connection.Open();
         options.UseSqlite(connection);
         options.EnableSensitiveDataLogging();
-    });
+    })
+    .AddTransient<CurrentUserMiddleware>();
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 

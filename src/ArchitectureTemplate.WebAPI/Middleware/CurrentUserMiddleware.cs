@@ -1,13 +1,10 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Middleware;
 
-public class CurrentUserMiddleware(RequestDelegate next, ILogger<CurrentUserMiddleware> logger)
+public class CurrentUserMiddleware(ILogger<CurrentUserMiddleware> logger) : IMiddleware
 {
-    private readonly ILogger<CurrentUserMiddleware> _logger = logger;
-    private readonly RequestDelegate _next = next;
+    private const string CURRENT_USER_ID = "ad19affc-a438-4709-8b0b-1c2c1b2527dc"; // pretend user id    
 
-    private const string CURRENT_USER_ID = "ad19affc-a438-4709-8b0b-1c2c1b2527dc"; // pretend user id
-
-    public async Task InvokeAsync(HttpContext httpContext)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         UserResponse? user = null;
         try
@@ -16,19 +13,19 @@ public class CurrentUserMiddleware(RequestDelegate next, ILogger<CurrentUserMidd
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting user");
-            httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            logger.LogError(ex, "Error getting user");
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
         }
 
         if (user == null)
         {
-            httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
         }
         else
         {
-            httpContext.Items.Add("user", user);
+            context.Items.Add("user", user);
 
-            await _next(httpContext);
+            await next(context);
         }
     }
 
