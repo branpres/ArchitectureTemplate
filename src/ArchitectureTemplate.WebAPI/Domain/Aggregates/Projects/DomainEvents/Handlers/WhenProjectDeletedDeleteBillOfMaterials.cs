@@ -1,13 +1,16 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class WhenProjectDeletedDeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
+public class WhenProjectDeletedDeleteBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler
 {
-    public async Task Handle(ProjectDeleted domainEvent)
+    public async Task Handle(IDomainEvent domainEvent)
     {
-        var billOfMaterials = await templateDbContext.BillOfMaterials
-            .FirstOrDefaultAsync(x => x.ProjectId == domainEvent.Project.ProjectId && !x.IsDeleted);
-        billOfMaterials?.SoftDelete();
+        if (domainEvent is ProjectDeleted projectDeleted)
+        {
+            var billOfMaterials = await templateDbContext.BillOfMaterials
+                .FirstOrDefaultAsync(x => x.ProjectId == projectDeleted.Project.ProjectId && !x.IsDeleted);
+            billOfMaterials?.SoftDelete();
 
-        Console.WriteLine("Bill Of Materials Deleted");
+            Console.WriteLine("Bill Of Materials Deleted");
+        }
     }
 }

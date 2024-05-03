@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 
-public interface IDomainEventHandler<T> where T : IDomainEvent
+public interface IDomainEventHandler
 {
-    Task Handle(T domainEvent);
+    Task Handle(IDomainEvent domainEvent);
 }

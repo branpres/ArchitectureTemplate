@@ -4,6 +4,7 @@ global using ArchitectureTemplate.WebAPI.Domain.Aggregates.LocationBreakdownStru
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Outbox;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents;
+global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 global using ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 global using ArchitectureTemplate.WebAPI.Features;
 global using ArchitectureTemplate.WebAPI.Infrastructure;

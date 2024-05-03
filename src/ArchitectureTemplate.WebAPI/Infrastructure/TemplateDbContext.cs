@@ -24,7 +24,7 @@ public class TemplateDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await domainEventDispatcher.DispatchDomainEvents(this);
+        await domainEventDispatcher.DispatchDomainEvents();
 
         foreach (var entry in ChangeTracker.Entries<IBasicMetadata>())
         {

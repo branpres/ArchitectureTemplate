@@ -1,47 +1,61 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 
-public class DomainEventDispatcher(IServiceProvider serviceProvider)
+public class DomainEventDispatcher
 {
-    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly TemplateDbContext _templateDbContext;
+    private readonly Dictionary<Type, List<IDomainEventHandler>> _handlers = [];
 
-    public async Task DispatchDomainEvents(TemplateDbContext templateDbContext)
+    public DomainEventDispatcher(TemplateDbContext templateDbContext)
     {
-        var entities = GetEntitiesWithDomainEvents(templateDbContext);
+        _templateDbContext = templateDbContext;
+
+        AddHandlers();
+    }    
+
+    public async Task DispatchDomainEvents()
+    {
+        var entities = GetEntitiesWithDomainEvents();
         var domainEvents = entities.SelectMany(x => x.DomainEvents).ToList();
         if (domainEvents.Count != 0)
         {
             foreach (var domainEvent in domainEvents)
             {
-                var domainEventHandlerType = typeof(IDomainEventHandler<>).MakeGenericType(domainEvent.GetType());
-                var handleMethod = domainEventHandlerType.GetMethod("Handle");
-                var domainEventHandlers = _serviceProvider.GetServices(domainEventHandlerType);
-                if (domainEventHandlers != null && domainEventHandlers.Any())
+                foreach (var handler in _handlers[domainEvent.GetType()])
                 {
-                    foreach (var domainEventHandler in domainEventHandlers)
-                    {
-                        if (domainEventHandler != null)
-                        {
-                            await handleMethod?.Invoke((dynamic)domainEventHandler, new object[] { domainEvent });
-                        }
-                    }
+                    await handler.Handle(domainEvent);
                 }
             }
 
-            await PersistDomainEvents(templateDbContext, domainEvents);
+            await PersistDomainEvents(domainEvents);
         }
     }
 
-    private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(TemplateDbContext templateDbContext)
+    private void AddHandlers()
     {
-        return templateDbContext.ChangeTracker.Entries<DomainEventEntityBase>()
+        _handlers.Add(typeof(ProjectCreated),
+        [
+            new WhenProjectCreatedCreateBillOfMaterials(_templateDbContext),
+            new WhenProjectCreatedCreateInitialScopePackage(_templateDbContext)
+        ]);
+
+        _handlers.Add(typeof(ProjectDeleted),
+        [
+            new WhenProjectDeletedDeleteBillOfMaterials(_templateDbContext),
+            new WhenProjectDeletedDeleteScopePackages(_templateDbContext)
+        ]);
+    }
+
+    private List<DomainEventEntityBase> GetEntitiesWithDomainEvents()
+    {
+        return _templateDbContext.ChangeTracker.Entries<DomainEventEntityBase>()
             .Where(x => x.Entity.DomainEvents.Count != 0)
             .Select(x => x.Entity)
             .ToList();
     }
 
-    private async static Task PersistDomainEvents(TemplateDbContext templateDbContext, List<IDomainEvent> domainEvents)
+    private async Task PersistDomainEvents(List<IDomainEvent> domainEvents)
     {
-        await templateDbContext.OutboxMessage.AddRangeAsync(
+        await _templateDbContext.OutboxMessage.AddRangeAsync(
             domainEvents
             .Select(x =>
                 new OutboxMessage(

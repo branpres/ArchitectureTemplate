@@ -1,16 +1,19 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class WhenProjectCreatedCreateInitialScopePackage(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
+public class WhenProjectCreatedCreateInitialScopePackage(TemplateDbContext templateDbContext) : IDomainEventHandler
 {
-    public async Task Handle(ProjectCreated domainEvent)
+    public async Task Handle(IDomainEvent domainEvent)
     {
-        var scopePackage = new ScopePackage
+        if (domainEvent is  ProjectCreated projectCreated)
         {
-            ProjectId = domainEvent.Project.ProjectId
-        };
+            var scopePackage = new ScopePackage
+            {
+                ProjectId = projectCreated.Project.ProjectId
+            };
 
-        await templateDbContext.ScopePackage.AddAsync(scopePackage);
+            await templateDbContext.ScopePackage.AddAsync(scopePackage);
 
-        Console.WriteLine("Scope Package Created");
+            Console.WriteLine("Scope Package Created");
+        }
     }
 }
