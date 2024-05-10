@@ -14,10 +14,13 @@ public class DomainEventDispatcher
         {
             foreach (var domainEvent in domainEvents)
             {
-                foreach (var handler in _handlers[domainEvent.GetType()])
+                if (_handlers.TryGetValue(domainEvent.GetType(), out var domainEventhandlers))
                 {
-                    await handler.Handle(domainEvent);
-                }
+                    foreach (var handler in domainEventhandlers)
+                    {
+                        await handler.Handle(domainEvent);
+                    }
+                }                
             }
 
             await PersistDomainEvents(templateDbContext, domainEvents);
