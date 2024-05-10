@@ -1,14 +1,17 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class WhenProjectDeletedDeleteScopePackages(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectDeleted>
+public class WhenProjectDeletedDeleteScopePackages(TemplateDbContext templateDbContext) : IDomainEventHandler
 {
-    public async Task Handle(ProjectDeleted domainEvent)
+    public async Task Handle(IDomainEvent domainEvent)
     {
-        var scopePackages = await templateDbContext.ScopePackage
-            .Where(x => x.ProjectId == domainEvent.Project.ProjectId && !x.IsDeleted)
+        if (domainEvent is ProjectDeleted projectDeleted)
+        {
+            var scopePackages = await templateDbContext.ScopePackage
+            .Where(x => x.ProjectId == projectDeleted.Project.ProjectId && !x.IsDeleted)
             .ToListAsync();
-        scopePackages.ForEach(x => x.SoftDelete());
+            scopePackages.ForEach(x => x.SoftDelete());
 
-        Console.WriteLine("Scope Packages Deleted");
+            Console.WriteLine("Scope Packages Deleted");
+        }
     }
 }

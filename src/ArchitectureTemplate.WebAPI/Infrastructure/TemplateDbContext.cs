@@ -1,9 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Infrastructure;
 
-public class TemplateDbContext(
-    DbContextOptions options,
-    ICurrentUser currentUser,
-    DomainEventDispatcher domainEventDispatcher) : DbContext(options)
+public class TemplateDbContext(DbContextOptions options, ICurrentUser currentUser) : DbContext(options)
 {
     public DbSet<Project> Project { get; set; }
 
@@ -24,8 +21,6 @@ public class TemplateDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await domainEventDispatcher.DispatchDomainEvents(this);
-
         foreach (var entry in ChangeTracker.Entries<IBasicMetadata>())
         {
             switch (entry.State)

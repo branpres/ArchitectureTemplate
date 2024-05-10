@@ -28,6 +28,8 @@ public class DomainEventOutboxProcessor(
                 .SetProperty(y => y.UpdatedOn, DateTime.UtcNow),
                 stoppingToken);
 
+            var handlers = GetHandlers();
+
             foreach (var outboxMessage in notProcessedOutboxMessages)
             {
                 try
@@ -35,41 +37,35 @@ public class DomainEventOutboxProcessor(
                     var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                     if (domainEvent != null)
                     {
-                        var domainEventOutboxMessageHandlerType = typeof(IDomainEventOutboxMessageHandler<>).MakeGenericType(domainEvent.GetType());
-                        if (domainEventOutboxMessageHandlerType != null)
+                        if (handlers.TryGetValue(domainEvent.GetType(), out var outboxMessagehandlers))
                         {
-                            var handleMethod = domainEventOutboxMessageHandlerType.GetMethod("Handle");
-                            var domainEventOutboxMessageHandlers = scope.ServiceProvider.GetServices(domainEventOutboxMessageHandlerType).ToList();
-                            foreach (var domainEventOutboxMessageHandler in domainEventOutboxMessageHandlers)
+                            foreach (var handler in outboxMessagehandlers)
                             {
-                                if (domainEventOutboxMessageHandler != null)
+                                var handlerName = handler.GetType().Name;
+
+                                var outboxMessageHandlerInstance = outboxMessage.OutboxMessageHandlerInstances.FirstOrDefault(x => x.HandlerName == handlerName);
+                                if (outboxMessageHandlerInstance == null)
                                 {
-                                    var handlerName = domainEventOutboxMessageHandler.GetType().Name;
+                                    outboxMessageHandlerInstance = new OutboxMessageHandlerInstance(outboxMessage.OutboxMessageId, handlerName);
+                                    outboxMessage.AddOutboxMessageHandlerInstance(outboxMessageHandlerInstance);
+                                }
 
-                                    var outboxMessageHandlerInstance = outboxMessage.OutboxMessageHandlerInstances.FirstOrDefault(x => x.HandlerName == handlerName);
-                                    if (outboxMessageHandlerInstance == null)
+                                try
+                                {
+                                    if (outboxMessageHandlerInstance.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded)
                                     {
-                                        outboxMessageHandlerInstance = new OutboxMessageHandlerInstance(outboxMessage.OutboxMessageId, handlerName);
-                                        outboxMessage.AddOutboxMessageHandlerInstance(outboxMessageHandlerInstance);
-                                    }
-
-                                    try
-                                    {
-                                        if (outboxMessageHandlerInstance.OutboxMessageHandlerInstanceStatus != OutboxMessageHandlerInstanceStatus.Succeeded)
-                                        {
-                                            await handleMethod?.Invoke((dynamic)domainEventOutboxMessageHandler, new object[] { domainEvent });
-                                            outboxMessageHandlerInstance.MarkSucceeded();
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        outboxMessageHandlerInstance.MarkFailed();
-
-                                        logger.LogError(ex, "Exception occurred when invoking outbox message handler.");
+                                        await handler.Handle(domainEvent);
+                                        outboxMessageHandlerInstance.MarkSucceeded();
                                     }
                                 }
+                                catch (Exception ex)
+                                {
+                                    outboxMessageHandlerInstance.MarkFailed();
+
+                                    logger.LogError(ex, "Exception occurred when invoking outbox message handler.");
+                                }
                             }
-                        }                        
+                        }                                                 
                     }
 
                     var outboxMessageStatus = outboxMessage.OutboxMessageHandlerInstances
@@ -102,5 +98,24 @@ public class DomainEventOutboxProcessor(
                 await templateDbContext.SaveChangesAsync(stoppingToken);
             }
         }
+    }
+
+    private static Dictionary<Type, List<IDomainEventOutboxMessageHandler>> GetHandlers()
+    {
+        return new Dictionary<Type, List<IDomainEventOutboxMessageHandler>>
+        {
+            {
+                typeof(ProjectUserAdded),
+                [
+                    new WhenProjectUserAddedSendEmail()
+                ]
+            },
+            {
+                typeof(ProjectAdminUserAdded),
+                [
+                    new WhenProjectAdminUserAddedSendEmail()
+                ]
+            }
+        };
     }
 }

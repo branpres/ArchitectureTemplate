@@ -4,6 +4,7 @@ global using ArchitectureTemplate.WebAPI.Domain.Aggregates.LocationBreakdownStru
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Outbox;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects;
 global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents;
+global using ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 global using ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 global using ArchitectureTemplate.WebAPI.Features;
 global using ArchitectureTemplate.WebAPI.Infrastructure;
@@ -14,6 +15,7 @@ global using FluentValidation.Results;
 global using Microsoft.AspNetCore.Diagnostics;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Diagnostics;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.OpenApi.Models;
 global using Newtonsoft.Json;

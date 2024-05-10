@@ -41,12 +41,13 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
                 services.Remove(serviceDescriptor);
             }
             services.AddDbContext<TemplateDbContext>(
-                dbContextOptions =>
+                (sp, options) =>
                 {
-                    dbContextOptions
+                    options
                         .UseMySql(
                             _mySqlContainer.GetConnectionString(),
                             ServerVersion.AutoDetect(_mySqlContainer.GetConnectionString()));
+                    options.AddInterceptors(sp.GetRequiredService<TemplateDbContextSaveChangesInterceptor>());
                 }
             );
         });

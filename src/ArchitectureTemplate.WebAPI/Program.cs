@@ -13,13 +13,14 @@ builder.Services
     .AddValidatorsFromAssemblyContaining<Program>()
     .AddScoped<ICurrentUser, CurrentUser>()
     .AddHostedService<DomainEventOutboxProcessor>()
-    .AddDomainEventHandling()
-    .AddDbContext<TemplateDbContext>(options =>
+    .AddScoped<TemplateDbContextSaveChangesInterceptor>()
+    .AddDbContext<TemplateDbContext>((sp, options) =>
     {
         var connection = new SqliteConnection("Data Source=TemplateDB;Mode=Memory;Cache=Shared");
         connection.Open();
         options.UseSqlite(connection);
         options.EnableSensitiveDataLogging();
+        options.AddInterceptors(sp.GetRequiredService<TemplateDbContextSaveChangesInterceptor>());
     })
     .AddTransient<CurrentUserMiddleware>();
 

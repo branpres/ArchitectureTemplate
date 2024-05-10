@@ -1,17 +1,20 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class WhenProjectCreatedCreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler<ProjectCreated>
+public class WhenProjectCreatedCreateBillOfMaterials(TemplateDbContext templateDbContext) : IDomainEventHandler
 {
-    public async Task Handle(ProjectCreated domainEvent)
+    public async Task Handle(IDomainEvent domainEvent)
     {
-        var billOfMaterials = new BillOfMaterials
+        if (domainEvent is ProjectCreated projectCreated)
         {
-            ProjectId = domainEvent.Project.ProjectId,
-            BillOfMaterialsName = domainEvent.Project.ProjectName!
-        };
+            var billOfMaterials = new BillOfMaterials
+            {
+                ProjectId = projectCreated.Project.ProjectId,
+                BillOfMaterialsName = projectCreated.Project.ProjectName!
+            };
 
-        await templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);
+            await templateDbContext.BillOfMaterials.AddAsync(billOfMaterials);
 
-        Console.WriteLine("Bill Of Materials Created");
+            Console.WriteLine("Bill Of Materials Created");
+        }
     }
 }
