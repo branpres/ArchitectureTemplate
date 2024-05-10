@@ -9,4 +9,9 @@ public abstract class DomainEventEntityBase
     {
         DomainEvents.Add(domainEvent);
     }
+
+    public void ClearDomainEvents()
+    {
+        DomainEvents.Clear();
+    }
 }

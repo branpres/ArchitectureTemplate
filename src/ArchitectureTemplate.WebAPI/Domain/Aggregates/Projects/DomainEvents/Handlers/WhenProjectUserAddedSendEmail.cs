@@ -1,10 +1,13 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.Aggregates.Projects.DomainEvents.Handlers;
 
-public class WhenProjectUserAddedSendEmail : IDomainEventOutboxMessageHandler<ProjectUserAdded>
+public class WhenProjectUserAddedSendEmail : IDomainEventOutboxMessageHandler
 {
-    public Task Handle(ProjectUserAdded domainEvent)
+    public Task Handle(IDomainEvent domainEvent)
     {
-        Console.WriteLine($"Email sent to project user. {DateTime.Now}");
+        if (domainEvent is ProjectUserAdded)
+        {
+            Console.WriteLine($"Email sent to project user. {DateTime.Now}");
+        }            
 
         return Task.CompletedTask;
     }

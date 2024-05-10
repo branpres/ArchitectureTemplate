@@ -5,9 +5,11 @@ public static class DomainEventDispatcher
     public static async Task DispatchDomainEvents(TemplateDbContext templateDbContext)
     {
         var handlers = GetHandlers(templateDbContext);
-
         var entities = GetEntitiesWithDomainEvents(templateDbContext);
+
         var domainEvents = entities.SelectMany(x => x.DomainEvents).ToList();
+        entities.ForEach(x => x.ClearDomainEvents());
+
         if (domainEvents.Count != 0)
         {
             foreach (var domainEvent in domainEvents)

@@ -13,7 +13,6 @@ builder.Services
     .AddValidatorsFromAssemblyContaining<Program>()
     .AddScoped<ICurrentUser, CurrentUser>()
     .AddHostedService<DomainEventOutboxProcessor>()
-    .AddDomainEventHandling()
     .AddScoped<TemplateDbContextSaveChangesInterceptor>()
     .AddDbContext<TemplateDbContext>((sp, options) =>
     {

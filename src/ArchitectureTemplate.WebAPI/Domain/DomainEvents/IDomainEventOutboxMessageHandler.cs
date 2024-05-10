@@ -1,6 +1,6 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 
-public interface IDomainEventOutboxMessageHandler<T> where T : IDomainEvent
+public interface IDomainEventOutboxMessageHandler
 {
-    Task Handle(T domainEvent);
+    Task Handle(IDomainEvent domainEvent);
 }
