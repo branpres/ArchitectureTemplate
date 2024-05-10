@@ -4,7 +4,7 @@ public static class DomainEventsExtensions
 {
     public static IServiceCollection AddDomainEventHandling(this IServiceCollection services)
     {
-        services.AddScoped<DomainEventDispatcher>();
+        //services.AddScoped<DomainEventDispatcher>();
 
         typeof(IDomainEventOutboxMessageHandler<>)
             .Assembly

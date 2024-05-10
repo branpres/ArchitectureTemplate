@@ -1,12 +1,10 @@
 ﻿namespace ArchitectureTemplate.WebAPI.Domain.DomainEvents;
 
-public class DomainEventDispatcher
+public static class DomainEventDispatcher
 {
-    private readonly Dictionary<Type, List<IDomainEventHandler>> _handlers = [];
-
-    public async Task DispatchDomainEvents(TemplateDbContext templateDbContext)
+    public static async Task DispatchDomainEvents(TemplateDbContext templateDbContext)
     {
-        AddHandlers(templateDbContext);
+        var handlers = GetHandlers(templateDbContext);
 
         var entities = GetEntitiesWithDomainEvents(templateDbContext);
         var domainEvents = entities.SelectMany(x => x.DomainEvents).ToList();
@@ -14,7 +12,7 @@ public class DomainEventDispatcher
         {
             foreach (var domainEvent in domainEvents)
             {
-                if (_handlers.TryGetValue(domainEvent.GetType(), out var domainEventhandlers))
+                if (handlers.TryGetValue(domainEvent.GetType(), out var domainEventhandlers))
                 {
                     foreach (var handler in domainEventhandlers)
                     {
@@ -27,19 +25,25 @@ public class DomainEventDispatcher
         }
     }
 
-    private void AddHandlers(TemplateDbContext templateDbContext)
+    private static Dictionary<Type, List<IDomainEventHandler>> GetHandlers(TemplateDbContext templateDbContext)
     {
-        _handlers.Add(typeof(ProjectCreated),
-        [
-            new WhenProjectCreatedCreateBillOfMaterials(templateDbContext),
-            new WhenProjectCreatedCreateInitialScopePackage(templateDbContext)
-        ]);
-
-        _handlers.Add(typeof(ProjectDeleted),
-        [
-            new WhenProjectDeletedDeleteBillOfMaterials(templateDbContext),
-            new WhenProjectDeletedDeleteScopePackages(templateDbContext)
-        ]);
+        return new Dictionary<Type, List<IDomainEventHandler>>
+        {
+            {
+                typeof(ProjectCreated),
+                [
+                    new WhenProjectCreatedCreateBillOfMaterials(templateDbContext),
+                    new WhenProjectCreatedCreateInitialScopePackage(templateDbContext)
+                ]
+            },
+            {
+                typeof(ProjectDeleted),
+                [
+                    new WhenProjectDeletedDeleteBillOfMaterials(templateDbContext),
+                    new WhenProjectDeletedDeleteScopePackages(templateDbContext)
+                ]
+            }
+        };
     }
 
     private static List<DomainEventEntityBase> GetEntitiesWithDomainEvents(TemplateDbContext templateDbContext)
